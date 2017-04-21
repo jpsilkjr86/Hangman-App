@@ -1,1 +1,149 @@
-dsafsdfaw
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman App</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Put text in jumbotron for visibility -->
+    	<div class="jumbotron text-center">
+
+	        <h1>Let's play hangman!</h1>
+	        <p>Press ENTER to get started.</p>
+
+	        <!-- Empty elements, replaced by JavaScript functions during certain events -->
+	        <p><span id="gameBoardText" class="text-success"></span></p>
+
+	        <p><span id="lettersGuessedText" class="text-warning"></span></p>
+
+	        <p><span id="attemptsRemainingText" class="text-danger"></span></p>
+
+	        <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
+
+    	</div>
+    </div>
+
+    <!-- BEGIN JAVASCRIPT -->
+    <script type="text/javascript">
+      
+		// ******PSEUDO-CODE******
+
+		// 1) HTML page displays game screen with CSS styles
+
+		// 2) Dipslay "Press any key to start" - Game waits until any key is pressed before starting
+
+		// 3) User Presses Key, Game Function Starts
+
+		//    i) Generate random answer word (from libray or list?)
+
+		//    ii) Display a game board with a series of blanks equal to the number of characters in the answer word
+
+		//    iii) User presses key to guess a letter
+
+		//    iv) Call function to compare guess letter to each letter of the answer word
+
+		//       a) if right, change game board to include all letters matching the guessed letter
+
+		//       b) if wrong, take one life away
+
+		//       c) if all letters are correct, display victory
+
+		//    v) Loop through 3-ii, 3-iii and 3-iv items above until attempts remaining run out or until word is guessed
+
+
+		// ******DECLARE VARIABLES*******
+			var gameWordAnswer = "";
+			var userGuessString = "";
+			var gameOver = true;
+			var attemptsRemaining = 10;
+			var letterGuessed = "";
+
+
+		// ******DECLARE FUNCTIONS*******
+
+
+		// Main game function to carry out and order all tasks, called when user enters the choice
+		function gameFunction ()
+		{
+			console.log("Game starts");
+
+			// Set gameOver to false at beginning of every game
+			gameOver = false;
+
+			// Generate game word -- choose from random library?
+			gameWordAnswer = genGameWord();
+			console.log("gameWordAnswer: " + gameWordAnswer);
+
+			// Test to see if gameOver is being set correctly 
+			console.log("after gameFunction is called, gameOver = " + gameOver);
+
+			// Set userGuessString to empty
+			userGuessString = "";
+
+			// letterGuessed is set from this function, which also checks to make sure the letter wasn't already guessed.
+			// letterGuessed = getUserInput(userGuessString);
+			letterGuessed = getUserInput();
+
+			// Loop for the course of the game -- haven't figured out how it will work yet.
+			// while (attemptsRemaining > 0 && gameOver === false)
+			// {
+			// }
+
+			// Call gameBoardDisplay function, compares userGuessString and gameWordAnswer to generate hangman board
+			// gameBoardDisplay(userGuessString, gameWordAnswer);
+
+			// Call attemptsRemainingDisplay function
+			// attemptsRemainingDisplay(attemptsRemaining);
+
+
+		}
+
+
+		function genGameWord()
+		{
+			return "testword";
+		}
+
+
+		function getUserInput()
+		{
+			document.onkeyup = function(event)
+			{
+			   
+			   if (event.keyCode >= 65 && event.keyCode <= 90)
+			   {
+			   	letterGuessed = event.key;
+			   	console.log("Key pressed: " + letterGuessed);
+			   	return (letterGuessed);
+			   }
+			}
+		}
+
+		// INITIALIZE GAME: onkeyup event starts the gameFunction program IF gameOver is true
+		// NOTE: this is not working, and onkeyup is still triggering the event
+		
+		if (gameOver)
+		{
+			document.onkeyup = function(event)
+			{
+			   if (event.keyCode === 13)
+			   {
+			   	console.log("return pressed");
+			   	console.log("before gameFunction is called, gameOver = " + gameOver);
+			   	// gameOver = false;
+			   	gameFunction();
+			   }
+			}
+		}
+			
+
+
+    </script>
+    
+  </body>
+</html>
