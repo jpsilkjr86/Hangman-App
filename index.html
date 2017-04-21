@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Hangman App</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+
+  <body>
+    <div class="container">
+
+      <!-- Put text in jumbotron for visibility -->
+    	<div class="jumbotron text-center">
+
+	        <h1>Let's play hangman!</h1>
+	        <p>Press ENTER to get started.</p>
+
+	        <!-- Empty elements, replaced by JavaScript functions during certain events -->
+	        <p><span id="gameBoardText" class="text-success"></span></p>
+
+	        <p><span id="lettersGuessedText" class="text-warning"></span></p>
+
+	        <p><span id="attemptsRemainingText" class="text-danger"></span></p>
+
+	        <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
+
+    	</div>
+    </div>
+
+    <!-- BEGIN JAVASCRIPT -->
+    <script type="text/javascript">
+      
+		// ******DECLARE VARIABLES*******
+			var gameWordAnswer = "";
+			var userGuessString = "";
+			var gameOver = false;
+			var attemptsRemaining = 10;
+
+			var testword = "testword";
+
+		// ******DECLARE FUNCTIONS*******
+
+		// Main game function to carry out and order all tasks, called when user enters the choice
+		function gameFunction ()
+		{
+			console.log("Game starts");
+
+			// Sets gameOver to false at beginning of every game
+			gameOver = false;
+
+			// Generate game word -- choose from random library?
+			// gameWordAnswer = genGameWord();
+
+			// Set userGuessString to empty
+			userGuessString = "";
+
+			// Set initial attemptsRemaining according to length of string of gameWordAnswer
+			// attemptsRemaining = answerLength(gameWordAnswer);
+
+			// Loop for the course of the game -- haven't figured out how it will work yet.
+			// while (attemptsRemaining > 0 && gameOver === false)
+			// {
+			// }
+
+			// Call gameBoardDisplay function, compares userGuessString and gameWordAnswer to generate hangman board
+			// gameBoardDisplay(userGuessString, gameWordAnswer);
+
+			// Call attemptsRemainingDisplay function
+			// attemptsRemainingDisplay(attemptsRemaining);
+
+
+		}
+
+
+
+		// INITIALIZE GAME: onkeyup event starts the gameFunction program
+		document.onkeyup = function(event)
+		{
+		   if (event.keyCode === 13)
+		   {
+		   	console.log("return pressed");
+		   	gameFunction();
+		   }
+		}
+
+
+    </script>
+    
+  </body>
+</html>
