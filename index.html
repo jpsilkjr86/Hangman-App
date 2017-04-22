@@ -65,12 +65,9 @@
 			var letterArrayIndex = 0;
 			
 			// lettersGuessedArray is set as an initial array of 26 empty strings
-			var lettersGuessedArray = 
-			["", "", "", "", "",
-			"", "", "", "", "",
-			"", "", "", "", "",
-			"", "", "", "", "",
-			"", "", "", "", "", ""];
+			var guessedLetterIndex = 0;
+			
+			var lettersGuessedArray = [""];
 
 
 		// ******DECLARE FUNCTIONS*******
@@ -91,14 +88,12 @@
 			// Test to see if gameOver is being set correctly 
 			console.log("after gameFunction is called, gameOver = " + gameOver);
 
-			// Set initial letterGuessed, userGuessString and lettersGuessedArray to empty at beginning of each game.
-			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = ["", "", "", "a", "", "", "z", "", "", "",
-			"", "", "", "", "",	"", "", "", "", "",	"", "", "", "", "", ""];
+			// Set initial values to zero or empty at beginning of each game.
+			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = [""];
+			guessedLetterIndex = 0;
 
-			// letterGuessed is set from this function;
-			letterGuessed = getUserInput(lettersGuessedArray);
-
-			// compareLettersGuessed(lettersGuessedArray, letterGuessed);
+			// getUserinput function is called, which has a document.onkeyup function
+			getUserInput();
 
 			// compareInput function to determine if it's a correct letter, if it's wrong, or if it's already been guessed.
 
@@ -130,9 +125,9 @@
 			   
 			   if (event.keyCode >= 65 && event.keyCode <= 90)
 			   {
-					letterGuessed = event.key;
+			   		letterGuessed = event.key;
 
-					if (letterAlreadyGuessed(lettersGuessedArray, letterGuessed) == true)
+					if (letterAlreadyGuessed() == true)
 					{
 						letterGuessed = "";
 						console.log("letterGuessed value set to: " + letterGuessed);
@@ -141,13 +136,22 @@
 					{
 						letterGuessed = event.key;
 						console.log("Key pressed: " + letterGuessed);
-						return (letterGuessed);
+						
+						lettersGuessedArray[guessedLetterIndex] = letterGuessed;
+						guessedLetterIndex++;
+						console.log("guessedLetterIndex: " + guessedLetterIndex);
+						console.log("lettersGuessedArray: " + lettersGuessedArray);
+
+						// if (isLetterCorrect() == true)
 					}						
 			   }
 			}
 		}
 
-		function letterAlreadyGuessed(lettersGuessedArray, letterGuessed)
+
+
+
+		function letterAlreadyGuessed()
 		{
 			for (i=0; i<26; i++)
 			{
@@ -159,6 +163,7 @@
 					return true;					
 				}
 			}
+			return false;
 		}
 
 		// INITIALIZE GAME: onkeyup event starts the gameFunction program IF gameOver is true
