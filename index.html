@@ -26,7 +26,7 @@
 
 	        <p><span id="attemptsRemainingText" class="text-danger"></span></p>
 
-	        <p><span id="gameBoardText" class="text-success"></span></p>
+	        <p><strong><span id="gameBoardText" class="text-success"></span></strong></p>
 
     	</div>
     </div>
@@ -68,8 +68,8 @@
 		var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
 		var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
 
-		var userGuessString = "";  // Running list of correct letters, i.e. the user's Hangman Game Board
-		// var correctLetterPositions = [];  //to be used when assigning correct letters to userGuessString.
+		var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
+		// var correctLetterPositions = [];  //to be used when assigning correct letters to gameBoardArray.
 
 
 
@@ -102,12 +102,19 @@
 			attemptsRemaining = 10;
 
 			// Set initial values to zero or empty at beginning of each game.
-			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = [""];
+			letterGuessed = ""; lettersGuessedArray = [""];
 			numOfGuessedLetters = 0;
 
-			// Generates one random game word -- choose from a pre-set library?
+			// Generate one random game word -- choose from a pre-set library?
 			gameWordAnswer = genGameWord();
 			console.log("gameWordAnswer: " + gameWordAnswer);
+
+			// Generate game board, same length as gameWordAnswer but letters replace by spaces.
+			gameBoardArray = genGameBoard();
+			console.log("gameBoardArray: " + gameBoardArray);
+
+			// Print game board (initial is all blank)
+			printGameBoard();
 
 			// Main game procresses, triggered by input between keycodes 65 (a) and 90 (z)
 			document.onkeyup = function(event)
@@ -131,7 +138,9 @@
 
 						if (isLetterCorrect() == true)
 						{
-							// correctLetterPositions = getLetterPositions();
+							gameBoardArray = updateGameBoard(gameBoardArray);
+							printGameBoard();
+							console.log("gameBoardArray: " + gameBoardArray);
 							document.getElementById("gameResultText").innerHTML = "Match! See game board.";
 						}
 						else 
@@ -141,24 +150,9 @@
 							document.getElementById("attemptsRemainingText").innerHTML = "Attempts Remaining: " + attemptsRemaining;
 						}
 					}						
-			   }
-			}
-
-			// compareInput function to determine if it's a correct letter, if it's wrong, or if it's already been guessed.
-
-			// Loop for the course of the game -- haven't figured out how it will work yet.
-			// while (attemptsRemaining > 0 && gameOver === false)
-			// {
-			// }
-
-			// Call gameBoardDisplay function, compares userGuessString and gameWordAnswer to generate hangman board
-			// gameBoardDisplay(userGuessString, gameWordAnswer);
-
-			// Call attemptsRemainingDisplay function
-			// attemptsRemainingDisplay(attemptsRemaining);
-
-
-		}
+			   } //end of keycode input conditional 
+			} //end of document.onkeyup
+		} //end gameFunction
 
 
 		function genGameWord()
@@ -167,18 +161,32 @@
 		}
 
 
+		function genGameBoard()
+		{
+			var arrayX = [""];
+			for (g=0; g<gameWordAnswer.length; g++)
+			{
+				arrayX[g] = " " + "_" + " ";
+			}
+			console.log("arrayX: " + arrayX);
+			return arrayX;
+		}
+
+		function printGameBoard()
+		{
+			// .join is a function i looked up that converts an array of characters into a string.
+			var stringX = gameBoardArray.join(" ");
+			document.getElementById("gameBoardText").innerHTML = stringX;
+		}
+
 		function wasLetterAlreadyGuessed()
 		{
 			for (i=0; i<26; i++)
 			{
 				if (lettersGuessedArray[i] === letterGuessed)
-				{
-					console.log("Letter " + letterGuessed + " already guessed");
-					i=27;
-					console.log("i="  + i);
-					return true;					
-				}
+				{ return true; }
 			}
+			// if function exits the loop then must return false
 			return false;
 		}
 
@@ -187,29 +195,22 @@
 			for (j=0; j<gameWordAnswer.length; j++)
 			{
 				if (gameWordAnswer[j] === letterGuessed)
-				{
-					j=27;
-					console.log("letter matched!");
-					return true;					
-				}
+				{ return true; }
 			}
+			// if function exits the loop then must return false
 			return false;
 		}
 
-		// function updateGameBoard(arrayX)
-		// {
-		// 	for (k=0; k<gameWordAnswer.length; k++)
-		// 	{
-		// 		if (gameWordAnswer[k] === letterGuessed)
-		// 		{
-		// 			console.log("matched position: " + k);
-		// 			arrayX[k] = letterGuessed;					
-		// 		}
-		// 	}
-		// 	return arrayX;
-		// }
-
-
+		function updateGameBoard(arrayY)
+		{
+			for (k=0; k<gameWordAnswer.length; k++)
+			{
+				if (gameWordAnswer[k] === letterGuessed)
+				{ arrayY[k] = letterGuessed; }
+			}
+			// always return arrayY at the end
+			return arrayY;
+		}
 
     </script>
     
