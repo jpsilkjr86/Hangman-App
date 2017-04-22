@@ -62,6 +62,15 @@
 			var gameOver = true;
 			var attemptsRemaining = 10;
 			var letterGuessed = "";
+			var letterArrayIndex = 0;
+			
+			// lettersGuessedArray is set as an initial array of 26 empty strings
+			var lettersGuessedArray = 
+			["", "", "", "", "",
+			"", "", "", "", "",
+			"", "", "", "", "",
+			"", "", "", "", "",
+			"", "", "", "", "", ""];
 
 
 		// ******DECLARE FUNCTIONS*******
@@ -82,12 +91,16 @@
 			// Test to see if gameOver is being set correctly 
 			console.log("after gameFunction is called, gameOver = " + gameOver);
 
-			// Set userGuessString to empty
-			userGuessString = "";
+			// Set initial letterGuessed, userGuessString and lettersGuessedArray to empty at beginning of each game.
+			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = ["", "", "", "a", "", "", "z", "", "", "",
+			"", "", "", "", "",	"", "", "", "", "",	"", "", "", "", "", ""];
 
-			// letterGuessed is set from this function, which also checks to make sure the letter wasn't already guessed.
-			// letterGuessed = getUserInput(userGuessString);
-			letterGuessed = getUserInput();
+			// letterGuessed is set from this function;
+			letterGuessed = getUserInput(lettersGuessedArray);
+
+			// compareLettersGuessed(lettersGuessedArray, letterGuessed);
+
+			// compareInput function to determine if it's a correct letter, if it's wrong, or if it's already been guessed.
 
 			// Loop for the course of the game -- haven't figured out how it will work yet.
 			// while (attemptsRemaining > 0 && gameOver === false)
@@ -117,10 +130,34 @@
 			   
 			   if (event.keyCode >= 65 && event.keyCode <= 90)
 			   {
-			   	letterGuessed = event.key;
-			   	console.log("Key pressed: " + letterGuessed);
-			   	return (letterGuessed);
+					letterGuessed = event.key;
+
+					if (letterAlreadyGuessed(lettersGuessedArray, letterGuessed) == true)
+					{
+						letterGuessed = "";
+						console.log("letterGuessed value set to: " + letterGuessed);
+					}
+					else 
+					{
+						letterGuessed = event.key;
+						console.log("Key pressed: " + letterGuessed);
+						return (letterGuessed);
+					}						
 			   }
+			}
+		}
+
+		function letterAlreadyGuessed(lettersGuessedArray, letterGuessed)
+		{
+			for (i=0; i<26; i++)
+			{
+				if (lettersGuessedArray[i] === letterGuessed)
+				{
+					console.log("Letter " + letterGuessed + " already guessed");
+					i=27;
+					console.log("i="  + i);
+					return true;					
+				}
 			}
 		}
 
