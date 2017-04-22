@@ -57,21 +57,37 @@
 
 
 		// ******DECLARE VARIABLES*******
-			var gameWordAnswer = "";
-			var userGuessString = "";
-			var gameOver = true;
-			var attemptsRemaining = 10;
-			var letterGuessed = "";
-			var letterArrayIndex = 0;
-			
-			// lettersGuessedArray is set as an initial array of 26 empty strings
-			var guessedLetterIndex = 0;
-			
-			var lettersGuessedArray = [""];
+		var gameWordAnswer = "";
+		var userGuessString = "";
+		var gameOver = true;
+		var attemptsRemaining = 10;
+		var letterGuessed = "";
+		var letterArrayIndex = 0;
+		
+		// lettersGuessedArray is set as an initial array of 26 empty strings
+		var guessedLetterIndex = 0;
+		
+		var lettersGuessedArray = [""];
+
+
+
+		// ******INITIALIZE GAME****** -- onkeyup event starts the gameFunction program IF gameOver is true
+		
+		if (gameOver)
+		{
+			document.onkeyup = function(event)
+			{
+			   if (event.keyCode === 13)
+			   {
+			   	console.log("return pressed");
+			   	console.log("before gameFunction is called, gameOver = " + gameOver);
+			   	gameFunction();
+			   }
+			}
+		}
 
 
 		// ******DECLARE FUNCTIONS*******
-
 
 		// Main game function to carry out and order all tasks, called when user enters the choice
 		function gameFunction ()
@@ -92,8 +108,39 @@
 			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = [""];
 			guessedLetterIndex = 0;
 
-			// getUserinput function is called, which has a document.onkeyup function
-			getUserInput();
+			document.onkeyup = function(event)
+			{			   
+			   if (event.keyCode >= 65 && event.keyCode <= 90)
+			   {
+			   		letterGuessed = event.key;
+
+					if (wasLetterAlreadyGuessed() == true)
+					{
+						letterGuessed = "";
+						console.log("letterGuessed value set to: " + letterGuessed);
+					}
+					else 
+					{
+						console.log("Key pressed: " + letterGuessed);
+						lettersGuessedArray[guessedLetterIndex] = letterGuessed;
+						guessedLetterIndex++;
+						console.log("guessedLetterIndex: " + guessedLetterIndex);
+						console.log("lettersGuessedArray: " + lettersGuessedArray);
+
+						if (isLetterCorrect() == true)
+						{
+							// compareGuessAnswer();
+							console.log("Letter matched (test game function)");
+						}
+						else 
+						{
+							console.log("Guess was incorrect.");
+							attemptsRemaining--;
+							console.log("attemptsRemaining: " + attemptsRemaining);
+						}
+					}						
+			   }
+			}
 
 			// compareInput function to determine if it's a correct letter, if it's wrong, or if it's already been guessed.
 
@@ -118,40 +165,7 @@
 		}
 
 
-		function getUserInput()
-		{
-			document.onkeyup = function(event)
-			{
-			   
-			   if (event.keyCode >= 65 && event.keyCode <= 90)
-			   {
-			   		letterGuessed = event.key;
-
-					if (letterAlreadyGuessed() == true)
-					{
-						letterGuessed = "";
-						console.log("letterGuessed value set to: " + letterGuessed);
-					}
-					else 
-					{
-						letterGuessed = event.key;
-						console.log("Key pressed: " + letterGuessed);
-						
-						lettersGuessedArray[guessedLetterIndex] = letterGuessed;
-						guessedLetterIndex++;
-						console.log("guessedLetterIndex: " + guessedLetterIndex);
-						console.log("lettersGuessedArray: " + lettersGuessedArray);
-
-						// if (isLetterCorrect() == true)
-					}						
-			   }
-			}
-		}
-
-
-
-
-		function letterAlreadyGuessed()
+		function wasLetterAlreadyGuessed()
 		{
 			for (i=0; i<26; i++)
 			{
@@ -166,23 +180,19 @@
 			return false;
 		}
 
-		// INITIALIZE GAME: onkeyup event starts the gameFunction program IF gameOver is true
-		// NOTE: this is not working, and onkeyup is still triggering the event
-		
-		if (gameOver)
+		function isLetterCorrect()
 		{
-			document.onkeyup = function(event)
+			for (j=0; j<gameWordAnswer.length; j++)
 			{
-			   if (event.keyCode === 13)
-			   {
-			   	console.log("return pressed");
-			   	console.log("before gameFunction is called, gameOver = " + gameOver);
-			   	// gameOver = false;
-			   	gameFunction();
-			   }
+				if (gameWordAnswer[j] === letterGuessed)
+				{
+					j=27;
+					console.log("letter matched!");
+					return true;					
+				}
 			}
-		}
-			
+			return false;
+		}			
 
 
     </script>
