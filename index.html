@@ -14,16 +14,19 @@
     	<div class="jumbotron text-center">
 
 	        <h1>Let's play hangman!</h1>
-	        <p>Press ENTER to get started.</p>
 
 	        <!-- Empty elements, replaced by JavaScript functions during certain events -->
 	        <p><span id="gameBoardText" class="text-success"></span></p>
+
+			<p><span id="gameMsgText" class="text-muted">Press ENTER to get started.</span></p>
+
+	        <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
 
 	        <p><span id="lettersGuessedText" class="text-warning"></span></p>
 
 	        <p><span id="attemptsRemainingText" class="text-danger"></span></p>
 
-	        <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
+	        <p><span id="gameBoardText" class="text-success"></span></p>
 
     	</div>
     </div>
@@ -58,16 +61,15 @@
 
 		// ******DECLARE VARIABLES*******
 		var gameWordAnswer = "";
-		var userGuessString = "";
 		var gameOver = true;
-		var attemptsRemaining = 10;
-		var letterGuessed = "";
-		var letterArrayIndex = 0;
+		var attemptsRemaining = 10;  
+		var letterGuessed = "";	 // user input variable for guessed letters
 		
-		// lettersGuessedArray is set as an initial array of 26 empty strings
-		var guessedLetterIndex = 0;
-		
-		var lettersGuessedArray = [""];
+		var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
+		var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
+
+		var userGuessString = "";  // Running list of correct letters, i.e. the user's Hangman Game Board
+		// var correctLetterPositions = [];  //to be used when assigning correct letters to userGuessString.
 
 
 
@@ -81,6 +83,7 @@
 			   {
 			   	console.log("return pressed");
 			   	console.log("before gameFunction is called, gameOver = " + gameOver);
+			   	document.getElementById("gameMsgText").innerHTML = "Now press any letter key to guess a letter!";
 			   	gameFunction();
 			   }
 			}
@@ -89,54 +92,53 @@
 
 		// ******DECLARE FUNCTIONS*******
 
-		// Main game function to carry out and order all tasks, called when user enters the choice
+		// MAIN GAME FUNCTION -- to carry out and order all tasks, called when user presses a key (see above)
 		function gameFunction ()
 		{
 			console.log("Game starts");
 
-			// Set gameOver to false at beginning of every game
+			// Set gameOver to false and attemptsRemaining to 10 at beginning of every game
 			gameOver = false;
-
-			// Generate game word -- choose from random library?
-			gameWordAnswer = genGameWord();
-			console.log("gameWordAnswer: " + gameWordAnswer);
-
-			// Test to see if gameOver is being set correctly 
-			console.log("after gameFunction is called, gameOver = " + gameOver);
+			attemptsRemaining = 10;
 
 			// Set initial values to zero or empty at beginning of each game.
 			letterGuessed = ""; userGuessString = ""; lettersGuessedArray = [""];
-			guessedLetterIndex = 0;
+			numOfGuessedLetters = 0;
 
+			// Generates one random game word -- choose from a pre-set library?
+			gameWordAnswer = genGameWord();
+			console.log("gameWordAnswer: " + gameWordAnswer);
+
+			// Main game procresses, triggered by input between keycodes 65 (a) and 90 (z)
 			document.onkeyup = function(event)
 			{			   
 			   if (event.keyCode >= 65 && event.keyCode <= 90)
 			   {
 			   		letterGuessed = event.key;
+					document.getElementById("gameMsgText").innerHTML = "You guessed: " + letterGuessed;
 
 					if (wasLetterAlreadyGuessed() == true)
 					{
-						letterGuessed = "";
-						console.log("letterGuessed value set to: " + letterGuessed);
+						document.getElementById("gameResultText").innerHTML = "Letter was already guessed.";
 					}
+
 					else 
-					{
-						console.log("Key pressed: " + letterGuessed);
-						lettersGuessedArray[guessedLetterIndex] = letterGuessed;
-						guessedLetterIndex++;
-						console.log("guessedLetterIndex: " + guessedLetterIndex);
-						console.log("lettersGuessedArray: " + lettersGuessedArray);
+					{						
+						lettersGuessedArray[numOfGuessedLetters] = letterGuessed;
+						numOfGuessedLetters++;
+						console.log("numOfGuessedLetters: " + numOfGuessedLetters);
+						document.getElementById("lettersGuessedText").innerHTML = "List of Guessed Letters: " + lettersGuessedArray;
 
 						if (isLetterCorrect() == true)
 						{
-							// compareGuessAnswer();
-							console.log("Letter matched (test game function)");
+							// correctLetterPositions = getLetterPositions();
+							document.getElementById("gameResultText").innerHTML = "Match! See game board.";
 						}
 						else 
 						{
-							console.log("Guess was incorrect.");
+							document.getElementById("gameResultText").innerHTML = "Incorrect guess. Try again!";
 							attemptsRemaining--;
-							console.log("attemptsRemaining: " + attemptsRemaining);
+							document.getElementById("attemptsRemainingText").innerHTML = "Attempts Remaining: " + attemptsRemaining;
 						}
 					}						
 			   }
@@ -192,7 +194,21 @@
 				}
 			}
 			return false;
-		}			
+		}
+
+		// function updateGameBoard(arrayX)
+		// {
+		// 	for (k=0; k<gameWordAnswer.length; k++)
+		// 	{
+		// 		if (gameWordAnswer[k] === letterGuessed)
+		// 		{
+		// 			console.log("matched position: " + k);
+		// 			arrayX[k] = letterGuessed;					
+		// 		}
+		// 	}
+		// 	return arrayX;
+		// }
+
 
 
     </script>
