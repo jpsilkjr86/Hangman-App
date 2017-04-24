@@ -59,17 +59,13 @@
 		//    v) Loop through 3-ii, 3-iii and 3-iv items above until attempts remaining run out or until word is guessed
 
 
-		// ******DECLARE VARIABLES*******
-		var gameWordAnswer = "";
-		var gameOver = true;
-		var attemptsRemaining = 10;  
-		var letterGuessed = "";	 // user input variable for guessed letters
+		// ******DECLARE GLOBAL VARIABLES*******
 		
-		var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
-		var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
+		var gameOver = true;
 
-		var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
-		// var correctLetterPositions = [];  //to be used when assigning correct letters to gameBoardArray.
+		// Set the word libary
+		var wordLibrary = ["library", "hippie", "continent", "biology", 
+		"javascript", "cuisine", "pomegranate", "tropical", "technology"]
 
 
 
@@ -81,9 +77,8 @@
 			{
 			   if (event.keyCode === 13)
 			   {
-			   	console.log("return pressed");
-			   	console.log("before gameFunction is called, gameOver = " + gameOver);
 			   	document.getElementById("gameMsgText").innerHTML = "Now press any letter key to guess a letter!";
+			   	gameOver = false;
 			   	gameFunction();
 			   }
 			}
@@ -97,24 +92,25 @@
 		{
 			console.log("Game starts");
 
-			// Set gameOver to false and attemptsRemaining to 10 at beginning of every game
-			gameOver = false;
-			attemptsRemaining = 10;
-
-			// Set initial values to zero or empty at beginning of each game.
-			letterGuessed = ""; lettersGuessedArray = [""];
-			numOfGuessedLetters = 0;
+			//Declare local variables scoped to gameFunction
+			var attemptsRemaining = 10;
+			var letterGuessed = "";	 // user input variable for guessed letters			
+			var gameWordAnswer = "";
+			var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
+			var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
+			var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
+			// var correctLetterPositions = [];  //to be used when assigning correct letters to gameBoardArray.
 
 			// Generate one random game word -- choose from a pre-set library?
 			gameWordAnswer = genGameWord();
 			console.log("gameWordAnswer: " + gameWordAnswer);
 
 			// Generate game board, same length as gameWordAnswer but letters replace by spaces.
-			gameBoardArray = genGameBoard();
+			gameBoardArray = genGameBoard(gameWordAnswer);
 			console.log("gameBoardArray: " + gameBoardArray);
 
 			// Print game board (initial is all blank)
-			printGameBoard();
+			printGameBoard(gameBoardArray);
 
 			// Main game procresses, triggered by input between keycodes 65 (a) and 90 (z)
 			document.onkeyup = function(event)
@@ -124,7 +120,7 @@
 			   		letterGuessed = event.key;
 					document.getElementById("gameMsgText").innerHTML = "You guessed: " + letterGuessed;
 
-					if (wasLetterAlreadyGuessed() == true)
+					if (wasLetterAlreadyGuessed(letterGuessed, lettersGuessedArray) == true)
 					{
 						document.getElementById("gameResultText").innerHTML = "Letter was already guessed.";
 					}
@@ -136,10 +132,10 @@
 						console.log("numOfGuessedLetters: " + numOfGuessedLetters);
 						document.getElementById("lettersGuessedText").innerHTML = "List of Guessed Letters: " + lettersGuessedArray;
 
-						if (isLetterCorrect() == true)
+						if (isLetterCorrect(letterGuessed, gameWordAnswer) == true)
 						{
-							gameBoardArray = updateGameBoard(gameBoardArray);
-							printGameBoard();
+							gameBoardArray = updateGameBoard(letterGuessed, gameWordAnswer, gameBoardArray);
+							printGameBoard(gameBoardArray);
 							console.log("gameBoardArray: " + gameBoardArray);
 							document.getElementById("gameResultText").innerHTML = "Match! See game board.";
 						}
@@ -157,14 +153,16 @@
 
 		function genGameWord()
 		{
-			return "testword";
+			var x = Math.floor(Math.random() * wordLibrary.length);
+			return (wordLibrary[x]);
+			// return "testword";
 		}
 
 
-		function genGameBoard()
+		function genGameBoard(gmWrd)
 		{
 			var arrayX = [""];
-			for (g=0; g<gameWordAnswer.length; g++)
+			for (g=0; g<gmWrd.length; g++)
 			{
 				arrayX[g] = " " + "_" + " ";
 			}
@@ -172,44 +170,44 @@
 			return arrayX;
 		}
 
-		function printGameBoard()
+		function printGameBoard(gmBrd)
 		{
 			// .join is a function i looked up that converts an array of characters into a string.
-			var stringX = gameBoardArray.join(" ");
+			var stringX = gmBrd.join(" ");
 			document.getElementById("gameBoardText").innerHTML = stringX;
 		}
 
-		function wasLetterAlreadyGuessed()
+		function wasLetterAlreadyGuessed(ltr, ary)
 		{
 			for (i=0; i<26; i++)
 			{
-				if (lettersGuessedArray[i] === letterGuessed)
+				if (ary[i] === ltr)
 				{ return true; }
 			}
 			// if function exits the loop then must return false
 			return false;
 		}
 
-		function isLetterCorrect()
+		function isLetterCorrect(ltr, gmWrd)
 		{
-			for (j=0; j<gameWordAnswer.length; j++)
+			for (j=0; j<gmWrd.length; j++)
 			{
-				if (gameWordAnswer[j] === letterGuessed)
+				if (gmWrd[j] === ltr)
 				{ return true; }
 			}
 			// if function exits the loop then must return false
 			return false;
 		}
 
-		function updateGameBoard(arrayY)
+		function updateGameBoard(ltr, gmWrd, gmBrd)
 		{
-			for (k=0; k<gameWordAnswer.length; k++)
+			for (k=0; k<gmWrd.length; k++)
 			{
-				if (gameWordAnswer[k] === letterGuessed)
-				{ arrayY[k] = letterGuessed; }
+				if (gmWrd[k] === ltr)
+				{ gmBrd[k] = ltr; }
 			}
 			// always return arrayY at the end
-			return arrayY;
+			return gmBrd;
 		}
 
     </script>
