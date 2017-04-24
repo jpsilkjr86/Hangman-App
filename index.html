@@ -13,9 +13,9 @@
       <!-- Put text in jumbotron for visibility -->
     	<div class="jumbotron text-center">
 
-	        <h1>Let's play hangman!</h1>
+	        <h1>Let's Play Hangman!</h1>
 
-	        <!-- Empty elements, replaced by JavaScript functions during certain events -->
+	        <!-- Empty elements, replaced by various JavaScript functions as needed -->
 	        <p><span id="gameBoardText" class="text-success"></span></p>
 
 			<p><span id="gameMsgText" class="text-muted">Press any key to get started.</span></p>
@@ -46,21 +46,27 @@
 
 		// 3) User Presses Key, Game Function Starts
 
-		//    i) Generate random answer word (from libray or list?)
+		//    i) Generate random answer word (from libray or list)
 
 		//    ii) Display a game board with a series of blanks equal to the number of characters in the answer word
 
 		//    iii) User presses key to guess a letter
 
-		//    iv) Call function to compare guess letter to each letter of the answer word
+		//       a) if the letter has already been guessed, try again
+
+		//       b) If not, proceed to (iv)
+
+		//    iv) Compare guess letter to each letter of the answer word
 
 		//       a) if right, change game board to include all letters matching the guessed letter
 
-		//       b) if wrong, take one life away
+		//       b) if wrong, take one attempt remaining away
 
-		//       c) if all letters are correct, display victory
+		//       c) repeat until either attempt remainings are exhausted or word is complete
 
-		//    v) Loop through 3-ii, 3-iii and 3-iv items above until attempts remaining run out or until word is guessed
+		//    v) If word is complete, display victory, add a win; if not, display loss, add a loss.
+
+		//    vi) Start over from (2)
 
 
 		// ******DECLARE GLOBAL VARIABLES*******
@@ -73,39 +79,49 @@
 		var wordLibrary = ["library", "hippie", "continent", "biology", 
 		"javascript", "cuisine", "pomegranate", "tropical", "technology"]
 
-		// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function 
-		// calls of startUp() and gameFunction()
+		// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startUp() and gameFunction()
 		var numOfWins = 0;
 		var numOfLosses = 0;
 
 
 
-		// ******INITIALIZE GAME****** -- onkeyup event starts the gameFunction program IF gameOver is true
+		// ******INITIALIZE GAME****** -- startUp() function is called "onload" in HTML body and if user chooses to play again.
 		
 		function startUp()
 		{
 			document.onkeyup = function(event)
 			{
-				console.log("is this working?");
-				if (gameOver)
+				if (wordLibrary.length === 0)
 				{
-				   	// Clears the board when this function is called for restarting the game.
-				   	clearMessage("gameResultText"); 
-				   	clearMessage("attemptsRemainingText"); 
-				   	clearMessage("lettersGuessedText");
-
-				   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
-				   	gameFunction();
+					// Prints message and disables game.
+					console.log(wordLibrary.length);
+					printMessage("gameResultText", "You have used up all the words in this game's library.");
+					document.onkeyup = null;
+					return;
 				}
+				else
+				{
+					console.log("is this working?");
+					if (gameOver)
+					{
+					   	// Clears the board when this function is called for restarting the game.
+					   	clearMessage("gameResultText"); 
+					   	clearMessage("attemptsRemainingText"); 
+					   	clearMessage("lettersGuessedText");
+
+					   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
+					   	gameFunction();
+					   	return;
+					}
+				}					
 			}
 		}
 
 		
 
 
-		// ******DECLARE FUNCTIONS*******
+		// ******MAIN GAME FUNCTION******* -- to carry out and order all tasks, called when user presses a key (see above). Essentially this program passes the ball back and forth between startUp() and gameFunction(), which house the only two document.onkeyup events. This allows the program to reinitialize the onkeyup events after they automatically disable themselves. I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it again to restart the game. After I housed both events in the two functions and had each function call each other before ending their scripts, the game was able to work properly.
 
-		// MAIN GAME FUNCTION -- to carry out and order all tasks, called when user presses a key (see above)
 		function gameFunction ()
 		{
 			console.log("Game starts");
@@ -116,7 +132,7 @@
 			// Declare local variables scoped to gameFunction, set their initial values
 			var attemptsRemaining = 10;
 			var letterGuessed = "";	 // user input variable for guessed letters			
-			var gameWordAnswer = "";
+			var gameWordAnswer = [""]; // the word answer that needs to be guessed, set as array, value defined below
 			var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
 			var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
 			var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
@@ -148,8 +164,7 @@
 					else // I.e. if letter was not already guessed
 					{
 						// Add letterGuessed to the list of guessed letters in lettersGuessedArray.
-						// Did not use "push" because of an issue where it would push the first added letter to index 1 
-						// rather than index 0, since the array was declared as an empty string. Not sure how to fix that.				
+						// Did not use "push" because of an issue where it would push the first added letter to index 1 rather than index 0, since the array was declared as an empty string. Not sure how to fix that.				
 						lettersGuessedArray[numOfGuessedLetters] = letterGuessed;
 						numOfGuessedLetters++;
 						printMessage("lettersGuessedText", "List of Guessed Letters: ", lettersGuessedArray);
@@ -166,7 +181,8 @@
 							if (areAllLettersOk(gameWordAnswer, gameBoardArray))
 						   	{
 						   		numOfWins++;
-						   		gameOver = true;						   		
+						   		gameOver = true;
+								clearMessage("attemptsRemainingText");						   		
 						   		printYouWin();						   		
 						   		console.log("gameOver:", gameOver);
 						   		startUp(); //calls the startUp function to kick the game initialization onkeyup function into gear
@@ -196,6 +212,8 @@
 		} //end gameFunction
 
 
+		// ******DECLARE SUBORDINATE FUNCTIONS*******
+
 		// This function can print messages with or without the third optional argument!
 		function printMessage(elementId, msg, opArg)
 		{
@@ -209,11 +227,39 @@
 		function clearMessage(elementId)
 		{ document.getElementById(elementId).innerHTML = ""; }
 
+		
+		// Generates and returns random word from wordLibrary, a global variable set above
 		function genGameWord()
 		{
 			var x = Math.floor(Math.random() * wordLibrary.length);
-			return (wordLibrary[x]);
-			// return "testword";
+			var randWord = wordLibrary[x];
+
+			console.log("wordLibrary length before loop:", wordLibrary.length);
+			console.log("wordLibrary before loop:", wordLibrary);
+
+			// Shift each member of wordLibrary left to replace the random word it just pulled
+			for (i=x; i<wordLibrary.length; i++)
+			{ wordLibrary[i] = wordLibrary[i+1]; }
+
+			// Pop off the last element of the array, which became "undefined" after the for loop
+			wordLibrary.pop();
+
+			console.log("wordLibrary length after loop:", wordLibrary.length);
+			console.log("wordLibrary after loop:", wordLibrary);
+
+			// converts randWord to an array and returns it.
+			return (wordToArray(randWord));		
+		}
+
+		// Takes any string argument and returns an array (not sure if this is necessary but it seems it might be better to compare arrays with arrays rather than arrays with strings.)
+		function wordToArray (wrd)
+		{
+			var ary = [""];
+
+			for (i=0; i<wrd.length; i++)
+			{ ary[i] = wrd.charAt(i); }
+			console.log("rand word in wortToArray function:", ary);
+			return (ary);
 		}
 
 
