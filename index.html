@@ -7,7 +7,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
   </head>
 
-  <body onload="startUp()">
+  <!-- Call startScreen() function upon page loading to start the script. -->
+  <body onload="startScreen()">
     <div class="container">
 
       <!-- Put text in jumbotron for visibility -->
@@ -71,7 +72,7 @@
 
 		// ******DECLARE GLOBAL VARIABLES*******
 		
-		// gameOver is passed back and forth between the two main functions startUp() and gameFunction()
+		// gameOver is passed back and forth between the two main functions startScreen() and gameFunction()
 		// initial value set to true
 		var gameOver = true;
 
@@ -79,15 +80,15 @@
 		var wordLibrary = ["library", "hippie", "continent", "biology", 
 		"javascript", "cuisine", "pomegranate", "tropical", "technology"]
 
-		// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startUp() and gameFunction()
+		// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startScreen() and gameFunction()
 		var numOfWins = 0;
 		var numOfLosses = 0;
 
 
 
-		// ******INITIALIZE GAME****** -- startUp() function is called "onload" in HTML body and if user chooses to play again.
+		// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
 		
-		function startUp()
+		function startScreen()
 		{
 			document.onkeyup = function(event)
 			{
@@ -101,7 +102,6 @@
 				}
 				else
 				{
-					console.log("is this working?");
 					if (gameOver)
 					{
 					   	// Clears the board when this function is called for restarting the game.
@@ -109,6 +109,7 @@
 					   	clearMessage("attemptsRemainingText"); 
 					   	clearMessage("lettersGuessedText");
 
+					   	// Prints message, calls gameFunction(), ends script.
 					   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
 					   	gameFunction();
 					   	return;
@@ -120,7 +121,7 @@
 		
 
 
-		// ******MAIN GAME FUNCTION******* -- to carry out and order all tasks, called when user presses a key (see above). Essentially this program passes the ball back and forth between startUp() and gameFunction(), which house the only two document.onkeyup events. This allows the program to reinitialize the onkeyup events after they automatically disable themselves. I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it again to restart the game. After I housed both events in the two functions and had each function call each other before ending their scripts, the game was able to work properly.
+		// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called when user presses a key (see above). Essentially this whole program passes the ball back and forth between startScreen() and gameFunction(), which house the only two document.onkeyup events. This allows the program to reinitialize the onkeyup events after they automatically disable themselves. I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it again to restart the game. After I housed both events in the two functions and had each function call each other before ending their scripts, the game was able to work properly.
 
 		function gameFunction ()
 		{
@@ -132,28 +133,28 @@
 			// Declare local variables scoped to gameFunction, set their initial values
 			var attemptsRemaining = 10;
 			var letterGuessed = "";	 // user input variable for guessed letters			
+			var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
 			var gameWordAnswer = [""]; // the word answer that needs to be guessed, set as array, value defined below
 			var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
-			var lettersGuessedArray = [""];  //running list of all guessed letters, right and wrong.
-			var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
+			var lettersGuessedArray = [""];  // running list of all guessed letters, right and wrong.
 
 			// Generate one random game word
 			gameWordAnswer = genGameWord();
 			console.log("gameWordAnswer: " + gameWordAnswer);
 
-			// Generate game board, same length as gameWordAnswer but letters replace by spaces.
-			gameBoardArray = genGameBoard(gameWordAnswer);
+			// Generate blank game board, same length as gameWordAnswer but letters replaced by spaces.
+			gameBoardArray = genBlankBoard(gameWordAnswer);
 			console.log("gameBoardArray: " + gameBoardArray);
 
 			// Print game board, which at this point will be all blank
 			printGameBoard(gameBoardArray);
 
-			// Main game procresses, triggered by input between keycodes 65 (a) and 90 (z)
+			// Main game procresses, triggered by input between keycodes 65 (a/A) and 90 (z/Z)
 			document.onkeyup = function(event)
 			{
 				if (event.keyCode >= 65 && event.keyCode <= 90)
 			   	{
-			   		// Always converts the guessed letter to lowercase and displays it for the user
+			   		// Always converts the guessed letter to lowercase, stores it and displays it for the user
 			   		letterGuessed = event.key.toLowerCase();
 			   		printMessage("gameMsgText", "You guessed: ", letterGuessed);
 
@@ -164,7 +165,7 @@
 					else // I.e. if letter was not already guessed
 					{
 						// Add letterGuessed to the list of guessed letters in lettersGuessedArray.
-						// Did not use "push" because of an issue where it would push the first added letter to index 1 rather than index 0, since the array was declared as an empty string. Not sure how to fix that.				
+						// Did not use ".push()" because of an issue where it would push the first added letter to index 1 rather than index 0, since the array was declared as an empty string. Not sure how to fix that.				
 						lettersGuessedArray[numOfGuessedLetters] = letterGuessed;
 						numOfGuessedLetters++;
 						printMessage("lettersGuessedText", "List of Guessed Letters: ", lettersGuessedArray);
@@ -185,7 +186,7 @@
 								clearMessage("attemptsRemainingText");						   		
 						   		printYouWin();						   		
 						   		console.log("gameOver:", gameOver);
-						   		startUp(); //calls the startUp function to kick the game initialization onkeyup function into gear
+						   		startScreen(); // passes ball back to startScreen() function
 						   		return;
 						   	}
 						   	else { printMessage("gameResultText", "Match! See game board."); }
@@ -200,16 +201,16 @@
 						   		gameOver = true;
 						   		printYouLose();
 						   		console.log("gameOver:", gameOver);
-						   		startUp(); //calls the startUp function to kick the game initialization onkeyup function into gear
+						   		startScreen(); // passes ball back to startScreen() function
 						   		return;
 						    }
 							else  // I.e. if the letter is not correct but there are still remaining attempts
 							{ printMessage("gameResultText", "Incorrect guess. Try again!"); }				
 						}
-					}						
+					} // end of else (letter not alredy guessed)				
 				} //end of keycode input conditional 
 			} //end of document.onkeyup
-		} //end gameFunction
+		} //end of gameFunction(). Program will stay here until the ball is passed back to startScreen() (see win / loss conditions with "return" above)
 
 
 		// ******DECLARE SUBORDINATE FUNCTIONS*******
@@ -217,13 +218,14 @@
 		// This function can print messages with or without the third optional argument!
 		function printMessage(elementId, msg, opArg)
 		{
-			// used " == nule" so that the condition is true for either null or undefined arguments
+			// used " == null" so that the condition is true for either null or undefined arguments
 			if (opArg == null)
 			{document.getElementById(elementId).innerHTML = msg;}
 			else
 			{document.getElementById(elementId).innerHTML = msg + opArg;}
 		}
 
+		// This function clears HTML messages according to an elementId provided in the argument
 		function clearMessage(elementId)
 		{ document.getElementById(elementId).innerHTML = ""; }
 
@@ -231,11 +233,9 @@
 		// Generates and returns random word from wordLibrary, a global variable set above
 		function genGameWord()
 		{
+			// random word from library is generated
 			var x = Math.floor(Math.random() * wordLibrary.length);
 			var randWord = wordLibrary[x];
-
-			console.log("wordLibrary length before loop:", wordLibrary.length);
-			console.log("wordLibrary before loop:", wordLibrary);
 
 			// Shift each member of wordLibrary left to replace the random word it just pulled
 			for (i=x; i<wordLibrary.length; i++)
@@ -244,36 +244,36 @@
 			// Pop off the last element of the array, which became "undefined" after the for loop
 			wordLibrary.pop();
 
-			console.log("wordLibrary length after loop:", wordLibrary.length);
-			console.log("wordLibrary after loop:", wordLibrary);
+			// This will decrease the length of the wordLibrary array by 1
+			console.log(wordLibrary.length);
 
 			// converts randWord to an array and returns it.
 			return (wordToArray(randWord));		
 		}
 
-		// Takes any string argument and returns an array (not sure if this is necessary but it seems it might be better to compare arrays with arrays rather than arrays with strings.)
+		// Takes any string argument and returns an array (not sure if this is necessary but it seems better for the program to compare arrays with arrays rather than arrays with strings, although the latter seems to work just as well.)
 		function wordToArray (wrd)
 		{
 			var ary = [""];
 
 			for (i=0; i<wrd.length; i++)
 			{ ary[i] = wrd.charAt(i); }
-			console.log("rand word in wortToArray function:", ary);
 			return (ary);
 		}
 
-
-		function genGameBoard(gmWrd)
+		// Takes a word and returns an array full of blanks
+		function genBlankBoard(gmWrd)
 		{
 			var arrayX = [""];
 			for (g=0; g<gmWrd.length; g++)
 			{
-				arrayX[g] = " " + "_" + " ";
+				arrayX[g] = " _ ";
 			}
 			console.log("arrayX: " + arrayX);
 			return arrayX;
 		}
 
+		// Converts an array argument into a string, adds an extra space in between each element, prints result
 		function printGameBoard(gmBrd)
 		{
 			// .join is a function i looked up that converts an array of characters into a string.
@@ -281,17 +281,19 @@
 			document.getElementById("gameBoardText").innerHTML = stringX;
 		}
 
+		// Simple loop check to see if a letter argument matches any element of an array argument
 		function wasLetterAlreadyGuessed(ltr, ary)
 		{
-			for (i=0; i<26; i++)
+			for (i=0; i<ary.length; i++)
 			{
 				if (ary[i] === ltr)
 				{ return true; }
 			}
-			// if function exits the loop then must return false
+			// if function exits the loop then it must be false
 			return false;
 		}
 
+		// This function performs the same exact task as wasLetterAlreadyGuessed() above, but is named differently for the sake of descriptiveness
 		function isLetterCorrect(ltr, gmWrd)
 		{
 			for (j=0; j<gmWrd.length; j++)
@@ -299,10 +301,11 @@
 				if (gmWrd[j] === ltr)
 				{ return true; }
 			}
-			// if function exits the loop then must return false
+			// if function exits the loop then it must be false
 			return false;
 		}
 
+		// This function updates the game board by checking which position the guessed letter (ltr) matches the correct answer word (gmWrd), and then replacing the blank space in the same position on the game board (gmBrd) with the same letter (ltr). The for loop doesn't break, which allows multiple elements to be replaced by the same letter.
 		function updateGameBoard(ltr, gmWrd, gmBrd)
 		{
 			for (k=0; k<gmWrd.length; k++)
@@ -310,23 +313,23 @@
 				if (gmWrd[k] === ltr)
 				{ gmBrd[k] = ltr; }
 			}
-			// always return arrayY at the end
+			// always return gmBrd at the end
 			return gmBrd;
 		}
 
+		// This runs a quick loop checking to see if gmBrd and gmWrd arrays exactly match or not. If there's one inconcistency it returns false. If it can exit the loop then it must be true, so returns true.
 		function areAllLettersOk(gmWrd, gmBrd)
 		{
-			console.log("areAllLettersOk function, gameWordAnswer:", gmWrd);
-			console.log("areAllLettersOk function, gameBoardArray:", gmBrd);
 			for (m=0; m<gmWrd.length; m++)
 			{
 				if (gmBrd[m] !== gmWrd[m])
 				{ return false; }
 			}
-			// if function can exit the for loop, then it must be true that All Letters are Ok
+			// if the function can exit the for loop, then it must be true that All Letters are Ok
 			return true;
 		}
 
+		// This function prints set messages related to losing the game. numOfWins and numOfLosses are global variables.
 		function printYouLose()
 		{
 			document.getElementById("gameResultText").innerHTML = "Sorry! You lose.";
@@ -334,6 +337,7 @@
 			document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "<br>Losses: " + numOfLosses;
 		}
 
+		// This function prints set messages related to winning the game. numOfWins and numOfLosses are global variables.
 		function printYouWin()
 		{
 			document.getElementById("gameResultText").innerHTML = "Good job! You win!";
