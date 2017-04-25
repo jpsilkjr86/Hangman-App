@@ -5,6 +5,16 @@
     <title>Hangman App</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=UnifrakturCook:700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Asar" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rationale" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Eagle+Lake" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Vollkorn" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Kalam" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Rock+Salt" rel="stylesheet">
+
   </head>
 
   <!-- Call startScreen() function upon page loading to start the script. -->
@@ -83,24 +93,25 @@
 		
 		// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
 		// Function constructer for "wordTheme" object type, which enables stylistic changes for each new word serving as a "hint" to the user
-		function wordTheme(wrd, bkg)
+		function wordTheme(wrd, bkg, fnt)
 		{
 			this.word = wrd;
 			this.bkgImg = bkg;
+			this.fontType = fnt;
 		}
 
 		// wordLibrary is a global array of objects, each of which are instances of the wordTheme object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array, in addition to the styles for each word to be guessed. See genGameWord() function for more details about how this object is interpreted.
 		var wordLibrary = [""];
 
-		wordLibrary[0] = new wordTheme("library", "assets/images/text.jpg");
-		wordLibrary[1] = new wordTheme("hippie", "assets/images/colorful.jpg");
-		wordLibrary[2] = new wordTheme("continent", "assets/images/map.jpg");
-		wordLibrary[3] = new wordTheme("biology", "assets/images/biology.jpg");
-		wordLibrary[4] = new wordTheme("javascript", "assets/images/code.jpg");
-		wordLibrary[5] = new wordTheme("cuisine", "assets/images/food.jpg");
-		wordLibrary[6] = new wordTheme("pomegranate", "assets/images/fruits.jpg");
-		wordLibrary[7] = new wordTheme("tropical", "assets/images/tropical.jpg");
-		wordLibrary[8] = new wordTheme("technology", "assets/images/pipes.jpg");
+		wordLibrary[0] = new wordTheme("library", "assets/images/text.jpg", "'UnifrakturCook', cursive");
+		wordLibrary[1] = new wordTheme("hippie", "assets/images/colorful.jpg", "'Indie Flower', cursive");
+		wordLibrary[2] = new wordTheme("continent", "assets/images/map.jpg", "'Eagle Lake', cursive");
+		wordLibrary[3] = new wordTheme("biology", "assets/images/biology.jpg", "'Vollkorn', serif");
+		wordLibrary[4] = new wordTheme("javascript", "assets/images/code.jpg", "'Source Code Pro', monospace");
+		wordLibrary[5] = new wordTheme("cuisine", "assets/images/food.jpg", "'Asar', serif");
+		wordLibrary[6] = new wordTheme("pomegranate", "assets/images/fruits.jpg", "'Kalam', cursive");
+		wordLibrary[7] = new wordTheme("tropical", "assets/images/tropical.jpg", "'Rock Salt', cursive");
+		wordLibrary[8] = new wordTheme("technology", "assets/images/pipes.jpg", "'Rationale', sans-serif");
 
 		
 		// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
@@ -256,6 +267,8 @@
 
 			// Change background image of body according to the bkgImg property of the x element of wordLibrary[x] object.
 			document.body.style.backgroundImage = "url(" + wordLibrary[x].bkgImg + ")";
+
+			document.body.style.fontFamily = wordLibrary[x].fontType; 
 
 			// Shift each member of wordLibrary array left to replace the random element it just pulled
 			for (i=x; i<wordLibrary.length; i++)
