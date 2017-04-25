@@ -12,7 +12,7 @@
     <div class="container">
 
       <!-- Put text in jumbotron for visibility -->
-    	<div class="jumbotron text-center">
+    	<div class="jumbotron text-center" style="margin-top: 50px; opacity: .9">
 
 	        <h1>Let's Play Hangman!</h1>
 
@@ -80,38 +80,29 @@
 		var numOfWins = 0;
 		var numOfLosses = 0;
 
-		// (old code): Set the word libary to global. Needs to be global so that it can be updated through multiple calls of gameFunction
-		// var wordLibrary = ["library", "hippie", "continent", "biology", 
-		// "javascript", "cuisine", "pomegranate", "tropical", "technology"]
-
-
+		
 		// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
-		// Function constructer for "wordTheme" object type
+		// Function constructer for "wordTheme" object type, which enables stylistic changes for each new word serving as a "hint" to the user
 		function wordTheme(wrd, bkg)
 		{
 			this.word = wrd;
-			this.bkgClr = bkg;
-			// this.image = getElementById("image-placeholder").innerHTML = "assets/images/" + img;
+			this.bkgImg = bkg;
 		}
 
-		// wordLibrary is a global array of objects, each of which are instances of the wordTheme object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array.
+		// wordLibrary is a global array of objects, each of which are instances of the wordTheme object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array, in addition to the styles for each word to be guessed. See genGameWord() function for more details about how this object is interpreted.
 		var wordLibrary = [""];
 
-		wordLibrary[0] = new wordTheme("library", "lightblue");
-		wordLibrary[1] = new wordTheme("hippie", "lightgreen");
-		wordLibrary[2] = new wordTheme("continent", "maroon");
-		wordLibrary[3] = new wordTheme("biology", "purple");
-		wordLibrary[4] = new wordTheme("javascript", "orange");
-		wordLibrary[5] = new wordTheme("cuisine", "yellow");
-		wordLibrary[6] = new wordTheme("pomegranate", "brown");
-		wordLibrary[7] = new wordTheme("tropical", "tan");
-		wordLibrary[8] = new wordTheme("technology", "lightpink");
+		wordLibrary[0] = new wordTheme("library", "assets/images/text.jpg");
+		wordLibrary[1] = new wordTheme("hippie", "assets/images/colorful.jpg");
+		wordLibrary[2] = new wordTheme("continent", "assets/images/map.jpg");
+		wordLibrary[3] = new wordTheme("biology", "assets/images/biology.jpg");
+		wordLibrary[4] = new wordTheme("javascript", "assets/images/code.jpg");
+		wordLibrary[5] = new wordTheme("cuisine", "assets/images/food.jpg");
+		wordLibrary[6] = new wordTheme("pomegranate", "assets/images/fruits.jpg");
+		wordLibrary[7] = new wordTheme("tropical", "assets/images/tropical.jpg");
+		wordLibrary[8] = new wordTheme("technology", "assets/images/pipes.jpg");
 
-		// Set the word libary to global. Needs to be global so that it can be updated through multiple calls of gameFunction
-		// var wordLibrary = ["library", "hippie", "continent", "biology", 
-		// "javascript", "cuisine", "pomegranate", "tropical", "technology"]
-
-
+		
 		// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
 		
 		function startScreen()
@@ -122,7 +113,7 @@
 				{
 					// Prints message and disables game.
 					console.log(wordLibrary.length);
-					printMessage("gameResultText", "You have used up all the words in this game's library.");
+					printMessage("gameResultText", "Congratulations! You have beaten the game!");
 					document.onkeyup = null;
 					return;
 				}
@@ -156,7 +147,7 @@
 			// set gameOver to false at the beginning of each game.
 		   	gameOver = false;
 
-			// Declare local variables scoped to gameFunction, set their initial values
+			// Declare local variables scoped to gameFunction, set their initial values.
 			var attemptsRemaining = 10;
 			var letterGuessed = "";	 // user input variable for guessed letters			
 			var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
@@ -164,7 +155,7 @@
 			var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
 			var lettersGuessedArray = [""];  // running list of all guessed letters, right and wrong.
 
-			// Generate one random game word
+			// Generate one random game word, set the style theme according to the word.
 			gameWordAnswer = genGameWord();
 			console.log("gameWordAnswer: " + gameWordAnswer);
 
@@ -259,29 +250,25 @@
 		// Generates and returns random word from wordLibrary, a global array of objects set above. This function also changes the background according to the object properties of the randomly generated word.
 		function genGameWord()
 		{
-			// random word from library is generated
+			// random word from library is generated. The actual word is stored in the .word property of wordLibrary[x] object.
 			var x = Math.floor(Math.random() * wordLibrary.length);
 			var randWord = wordLibrary[x].word;
 
-			// Change background color of body according to the bkgClr property of the x element of wordLibrary.
-			document.body.style.backgroundColor = wordLibrary[x].bkgClr;
-			console.log("x:", x, "wordLibrary[x].word", wordLibrary[x].word, "wordLibrary[x].bkgClr", wordLibrary[x].bkgClr);
+			// Change background image of body according to the bkgImg property of the x element of wordLibrary[x] object.
+			document.body.style.backgroundImage = "url(" + wordLibrary[x].bkgImg + ")";
 
-			// Shift each member of wordLibrary left to replace the random word it just pulled
+			// Shift each member of wordLibrary array left to replace the random element it just pulled
 			for (i=x; i<wordLibrary.length; i++)
 			{ wordLibrary[i] = wordLibrary[i+1]; }
 
-			// Pop off the last element of the array, which became "undefined" after the for loop
+			// Pop off the last element of the array, which became "undefined" after the for loop. This will decrease the length of the wordLibrary array by 1.
 			wordLibrary.pop();
-
-			// This will decrease the length of the wordLibrary array by 1
-			console.log(wordLibrary.length);
 
 			// converts randWord to an array and returns it.
 			return (wordToArray(randWord));		
 		}
 
-		// Takes any string argument and returns an array (not sure if this is necessary but it seems better for the program to compare arrays with arrays rather than arrays with strings, although the latter seems to work just as well.)
+		// Takes any string argument and returns an array. This will prevent any conflict some browsers might have when comparing strings to arrays, as this program will do later when comparing the game board to the correct answer.
 		function wordToArray (wrd)
 		{
 			var ary = [""];
@@ -291,7 +278,7 @@
 			return (ary);
 		}
 
-		// Takes a word and returns an array full of blanks
+		// Takes a word and returns an array full of blanks.
 		function genBlankBoard(gmWrd)
 		{
 			var arrayX = [""];
@@ -303,7 +290,7 @@
 			return arrayX;
 		}
 
-		// Converts an array argument into a string, adds an extra space in between each element, prints result
+		// Converts an array argument into a string, adds an extra space in between each element, prints result.
 		function printGameBoard(gmBrd)
 		{
 			// .join is a function i looked up that converts an array of characters into a string.
@@ -311,7 +298,7 @@
 			document.getElementById("gameBoardText").innerHTML = stringX;
 		}
 
-		// Simple loop check to see if a letter argument matches any element of an array argument
+		// Simple loop check to see if a letter argument matches any element of an array argument.
 		function wasLetterAlreadyGuessed(ltr, ary)
 		{
 			for (i=0; i<ary.length; i++)
@@ -323,7 +310,7 @@
 			return false;
 		}
 
-		// This function performs the same exact task as wasLetterAlreadyGuessed() above, but is named differently for the sake of descriptiveness
+		// This function performs the same exact task as wasLetterAlreadyGuessed() above, but is named differently for the sake of descriptiveness.
 		function isLetterCorrect(ltr, gmWrd)
 		{
 			for (j=0; j<gmWrd.length; j++)
