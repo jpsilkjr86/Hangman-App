@@ -76,14 +76,40 @@
 		// initial value set to true
 		var gameOver = true;
 
-		// Set the word libary to global. Needs to be global so that it can be updated through multiple calls of gameFunction
-		var wordLibrary = ["library", "hippie", "continent", "biology", 
-		"javascript", "cuisine", "pomegranate", "tropical", "technology"]
-
 		// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startScreen() and gameFunction()
 		var numOfWins = 0;
 		var numOfLosses = 0;
 
+		// (old code): Set the word libary to global. Needs to be global so that it can be updated through multiple calls of gameFunction
+		// var wordLibrary = ["library", "hippie", "continent", "biology", 
+		// "javascript", "cuisine", "pomegranate", "tropical", "technology"]
+
+
+		// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
+		// Function constructer for "wordTheme" object type
+		function wordTheme(wrd, bkg)
+		{
+			this.word = wrd;
+			this.bkgClr = bkg;
+			// this.image = getElementById("image-placeholder").innerHTML = "assets/images/" + img;
+		}
+
+		// wordLibrary is a global array of objects, each of which are instances of the wordTheme object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array.
+		var wordLibrary = [""];
+
+		wordLibrary[0] = new wordTheme("library", "lightblue");
+		wordLibrary[1] = new wordTheme("hippie", "lightgreen");
+		wordLibrary[2] = new wordTheme("continent", "maroon");
+		wordLibrary[3] = new wordTheme("biology", "purple");
+		wordLibrary[4] = new wordTheme("javascript", "orange");
+		wordLibrary[5] = new wordTheme("cuisine", "yellow");
+		wordLibrary[6] = new wordTheme("pomegranate", "brown");
+		wordLibrary[7] = new wordTheme("tropical", "tan");
+		wordLibrary[8] = new wordTheme("technology", "lightpink");
+
+		// Set the word libary to global. Needs to be global so that it can be updated through multiple calls of gameFunction
+		// var wordLibrary = ["library", "hippie", "continent", "biology", 
+		// "javascript", "cuisine", "pomegranate", "tropical", "technology"]
 
 
 		// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
@@ -230,12 +256,16 @@
 		{ document.getElementById(elementId).innerHTML = ""; }
 
 		
-		// Generates and returns random word from wordLibrary, a global variable set above
+		// Generates and returns random word from wordLibrary, a global array of objects set above. This function also changes the background according to the object properties of the randomly generated word.
 		function genGameWord()
 		{
 			// random word from library is generated
 			var x = Math.floor(Math.random() * wordLibrary.length);
-			var randWord = wordLibrary[x];
+			var randWord = wordLibrary[x].word;
+
+			// Change background color of body according to the bkgClr property of the x element of wordLibrary.
+			document.body.style.backgroundColor = wordLibrary[x].bkgClr;
+			console.log("x:", x, "wordLibrary[x].word", wordLibrary[x].word, "wordLibrary[x].bkgClr", wordLibrary[x].bkgClr);
 
 			// Shift each member of wordLibrary left to replace the random word it just pulled
 			for (i=x; i<wordLibrary.length; i++)
