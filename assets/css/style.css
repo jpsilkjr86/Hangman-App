@@ -19,14 +19,14 @@ div.jumbotron
 #gameBoardText
 { font-size: 28px; }
 
-/* Theme for the word "library" */
-body.libraryTheme
+/* Theme for the word "calligraphy" */
+body.calligraphyTheme
 {
 	background-image: url("../images/text.jpg");
 	font-family: 'Berkshire Swash', cursive;
 }
 
-div.libraryTheme
+div.calligraphyTheme
 {
 	color: white;
     text-shadow: 1px 1px 1px black, 0 0 10px black, 0 0 1px darkblue;
@@ -34,7 +34,7 @@ div.libraryTheme
     opacity: .7;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "hippie" */
 body.hippieTheme
 {
 	background-image: url("../images/colorful.jpg");
@@ -49,7 +49,7 @@ div.hippieTheme
     opacity: .8;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "continent" */
 body.continentTheme
 {
 	background-image: url("../images/map.jpg");
@@ -64,7 +64,7 @@ div.continentTheme
     opacity: .7;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "biology" */
 body.biologyTheme
 {
 	background-image: url("../images/biology.jpg");
@@ -79,7 +79,7 @@ div.biologyTheme
     opacity: .8;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "javascript" */
 body.javascriptTheme
 {
 	background-image: url("../images/code.jpg");
@@ -94,7 +94,7 @@ div.javascriptTheme
     opacity: .95;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "cuisine" */
 body.cuisineTheme
 {
 	background-image: url("../images/food.jpg");
@@ -109,7 +109,7 @@ div.cuisineTheme
     opacity: .75;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "pomegranate" */
 body.pomegranateTheme
 {
 	background-image: url("../images/fruits.jpg");
@@ -124,7 +124,7 @@ div.pomegranateTheme
     opacity: .80;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "tropical" */
 body.tropicalTheme
 {
 	background-image: url("../images/tropical.jpg");
@@ -139,7 +139,7 @@ div.tropicalTheme
     opacity: .8;
 }
 
-/* Theme for the word "library" */
+/* Theme for the word "technology" */
 body.technologyTheme
 {
 	background-image: url("../images/pipes.jpg");

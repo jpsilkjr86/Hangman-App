@@ -40,23 +40,20 @@
 	// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startScreen() and gameFunction()
 	var numOfWins = 0;
 	var numOfLosses = 0;
-
-	// Declare music variable names, which will be used below in the wordObject instances.
-	// var wildWestMusic = '<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/59154337&amp;color=ff5500&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>';
-
+	
+	
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
 	// Function constructer for "wordObject" object type, which enables stylistic changes for each new word serving as a "hint" to the user
 	function wordObject(wrd, css)
 	{
 		this.word = wrd;
 		this.cssClass = css;
-		// this.music = msc;
 	}
 
 	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj() function for more details about how this object is interpreted.
 	var wordLibrary = [""];
 
-	wordLibrary[0] = new wordObject("library", "libraryTheme");
+	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme");
 	wordLibrary[1] = new wordObject("hippie", "hippieTheme");
 	wordLibrary[2] = new wordObject("continent", "continentTheme");
 	wordLibrary[3] = new wordObject("biology", "biologyTheme");
@@ -68,7 +65,7 @@
 
 	
 	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
-	
+
 	function startScreen()
 	{
 		document.onkeyup = function(event)
@@ -77,6 +74,8 @@
 			{
 				// Prints message and disables game.
 				clearMessage("gameMsgText");
+				clearMessage("attemptsRemainingText"); 
+				clearMessage("lettersGuessedText");
 				printMessage("gameResultText", "Congratulations! You have used up all the words in this game.");
 				document.onkeyup = null;
 				return;
