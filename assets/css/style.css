@@ -1,1 +1,64 @@
 /* Custom style classes, changed upon each generation of a new wordTheme object in the wordLibrary array. */
+body.initialTheme
+{
+	background-image: url('../images/wildwest.jpg');
+}
+
+body.libraryTheme
+{
+	background-image: url("../images/text.jpg");
+	font-family: 'UnifrakturCook', cursive;
+}
+
+div.libraryTheme
+{
+	
+}
+
+body.hippieTheme
+{
+	background-image: url("../images/colorful.jpg");
+	font-family: 'Indie Flower', cursive;
+}
+
+body.continentTheme
+{
+	background-image: url("../images/map.jpg");
+	font-family: 'Eagle Lake', cursive;
+}
+
+body.biologyTheme
+{
+	background-image: url("../images/biology.jpg");
+	font-family: 'Vollkorn', serif;
+}
+
+body.javascriptTheme
+{
+	background-image: url("../images/code.jpg");
+	font-family: 'Source Code Pro', monospace;
+}
+
+body.cuisineTheme
+{
+	background-image: url("../images/food.jpg");
+	font-family: 'Asar', serif;
+}
+
+body.pomegranateTheme
+{
+	background-image: url("../images/fruits.jpg");
+	font-family: 'Kalam', cursive;
+}
+
+body.tropicalTheme
+{
+	background-image: url("../images/tropical.jpg");
+	font-family: 'Rock Salt', cursive;
+}
+
+body.technologyTheme
+{
+	background-image: url("../images/pipes.jpg");
+	font-family: 'Rationale', sans-serif;
+}
