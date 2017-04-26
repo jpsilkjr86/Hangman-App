@@ -10,7 +10,8 @@
 	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
 
 	<!-- Google Font Links -->
-    <link href="https://fonts.googleapis.com/css?family=UnifrakturCook:700" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Rye" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Berkshire+Swash" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Asar" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Rationale" rel="stylesheet">
@@ -27,14 +28,14 @@
     <div class="container">
 
       <!-- Put text in jumbotron for visibility -->
-    	<div class="jumbotron text-center" style="margin-top: 50px; opacity: .8;">
+    	<div class="jumbotron text-center" id="mainJumbotron">
 
-	        <h1>Let's Play Hangman!</h1>
+	        <h1>Hangman</h1>
 
 	        <!-- Empty elements, replaced by various JavaScript functions as needed -->
 	        <p><span id="gameBoardText" class="text-success"></span></p>
 
-			<p><span id="gameMsgText" class="text-muted">Press any key to get started.</span></p>
+			<p><span id="gameMsgText" class="text-muted">Press any key to get started!</span></p>
 
 	        <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
 
@@ -49,6 +50,9 @@
 	        <p><span id="scoreBoardText" class="text-info"></span></p>
 
     	</div>
+
+    	<!-- <div id="musicDiv" hidden></div> -->
+
     </div>
 
     <!-- Exertnal JavaScript Sheet -->

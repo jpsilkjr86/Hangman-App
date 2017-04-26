@@ -1,64 +1,155 @@
 /* Custom style classes, changed upon each generation of a new wordTheme object in the wordLibrary array. */
+
+/* Initial body theme */
 body.initialTheme
 {
 	background-image: url('../images/wildwest.jpg');
+	font-family: 'Rye', cursive;
 }
 
+div.jumbotron
+{
+	margin-top: 50px;
+	color: white;
+    text-shadow: 1px 1px 2px black, 0 0 10px black, 0 0 1px black;
+    background-color: #880000;
+    opacity: .7;
+}
+
+#gameBoardText
+{ font-size: 28px; }
+
+/* Theme for the word "library" */
 body.libraryTheme
 {
 	background-image: url("../images/text.jpg");
-	font-family: 'UnifrakturCook', cursive;
+	font-family: 'Berkshire Swash', cursive;
 }
 
 div.libraryTheme
 {
-	
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px black, 0 0 1px darkblue;
+    background-color: #F5F5DC;
+    opacity: .7;
 }
 
+/* Theme for the word "library" */
 body.hippieTheme
 {
 	background-image: url("../images/colorful.jpg");
 	font-family: 'Indie Flower', cursive;
 }
 
+div.hippieTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 25px black, 0 0 1px darkblue;
+    background-color: #F5A5FF;
+    opacity: .8;
+}
+
+/* Theme for the word "library" */
 body.continentTheme
 {
 	background-image: url("../images/map.jpg");
 	font-family: 'Eagle Lake', cursive;
 }
 
+div.continentTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px blue, 0 0 1px darkblue;
+    background-color: #D5D5FF;
+    opacity: .7;
+}
+
+/* Theme for the word "library" */
 body.biologyTheme
 {
 	background-image: url("../images/biology.jpg");
 	font-family: 'Vollkorn', serif;
 }
 
+div.biologyTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px black, 0 0 1px darkblue;
+    background-color: #D5FFD5;
+    opacity: .8;
+}
+
+/* Theme for the word "library" */
 body.javascriptTheme
 {
 	background-image: url("../images/code.jpg");
 	font-family: 'Source Code Pro', monospace;
 }
 
+div.javascriptTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px white, 0 0 1px white;
+    background-color: #050505;
+    opacity: .95;
+}
+
+/* Theme for the word "library" */
 body.cuisineTheme
 {
 	background-image: url("../images/food.jpg");
 	font-family: 'Asar', serif;
 }
 
+div.cuisineTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px black, 0 0 1px darkblue;
+    background-color: #F5F5FC;
+    opacity: .75;
+}
+
+/* Theme for the word "library" */
 body.pomegranateTheme
 {
 	background-image: url("../images/fruits.jpg");
 	font-family: 'Kalam', cursive;
 }
 
+div.pomegranateTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 10px white, 0 0 1px darkblue;
+    background-color: #F56565;
+    opacity: .80;
+}
+
+/* Theme for the word "library" */
 body.tropicalTheme
 {
 	background-image: url("../images/tropical.jpg");
 	font-family: 'Rock Salt', cursive;
 }
 
+div.tropicalTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 3px black, 0 0 1px darkblue;
+    background-color: #95C5F5;
+    opacity: .8;
+}
+
+/* Theme for the word "library" */
 body.technologyTheme
 {
 	background-image: url("../images/pipes.jpg");
 	font-family: 'Rationale', sans-serif;
+}
+
+div.technologyTheme
+{
+	color: white;
+    text-shadow: 1px 1px 1px black, 0 0 1px white, 0 0 1px darkblue;
+    background-color: #151515;
+    opacity: .9;
 }

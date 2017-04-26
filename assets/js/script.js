@@ -41,15 +41,16 @@
 	var numOfWins = 0;
 	var numOfLosses = 0;
 
-	
+	// Declare music variable names, which will be used below in the wordObject instances.
+	// var wildWestMusic = '<iframe width="100%" height="166" scrolling="no" frameborder="no" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/59154337&amp;color=ff5500&amp;auto_play=true&amp;hide_related=false&amp;show_comments=true&amp;show_user=true&amp;show_reposts=false"></iframe>';
+
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
 	// Function constructer for "wordObject" object type, which enables stylistic changes for each new word serving as a "hint" to the user
 	function wordObject(wrd, css)
 	{
 		this.word = wrd;
-		// this.bkgImg = bkg;
-		// this.fontType = fnt;
 		this.cssClass = css;
+		// this.music = msc;
 	}
 
 	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj() function for more details about how this object is interpreted.
@@ -75,7 +76,6 @@
 			if (wordLibrary.length === 0)
 			{
 				// Prints message and disables game.
-				console.log(wordLibrary.length);
 				clearMessage("gameMsgText");
 				printMessage("gameResultText", "Congratulations! You have used up all the words in this game.");
 				document.onkeyup = null;
@@ -106,8 +106,6 @@
 
 	function gameFunction ()
 	{
-		console.log("Game starts");
-
 		// set gameOver to false at the beginning of each game.
 	   	gameOver = false;
 
@@ -120,19 +118,15 @@
 
 		// Generate one random answer word object, which contains the answer word and corresponding styles and themes.
 		var answerWordObj = genAnsWordObj();
-		console.log("answerWordObj.word:", answerWordObj.word);
 
 		// Converts the answer word into an array so that it can be compared later with the gameBoardArray.
 		answerWordObj.word = wordToArray(answerWordObj.word);
-		console.log("answerWordObj.word:", answerWordObj.word);
 
 		// Produces the web page styles that are associated with the answer word, serving as a hint for the user.
 		prodWordTheme(answerWordObj);
-		console.log("answerWordObj.cssClass:",document.body.className);
 
 		// Generate blank game board, same length as answerWordObj.word but letters replaced by spaces.
 		gameBoardArray = genBlankBoard(answerWordObj.word);
-		console.log("gameBoardArray: " + gameBoardArray);
 
 		// Print game board, which at this point will be all blank
 		printGameBoard(gameBoardArray);
@@ -164,7 +158,6 @@
 						// Update and print the game board
 						gameBoardArray = updateGameBoard(letterGuessed, answerWordObj.word, gameBoardArray);
 						printGameBoard(gameBoardArray);
-						console.log("gameBoardArray: " + gameBoardArray);
 
 						// Condition is a function which checks to see if all board letters are complete (returns bool)
 						if (areAllLettersOk(answerWordObj.word, gameBoardArray))
@@ -172,8 +165,7 @@
 					   		numOfWins++;
 					   		gameOver = true;
 							clearMessage("attemptsRemainingText");						   		
-					   		printYouWin();						   		
-					   		console.log("gameOver:", gameOver);
+					   		printYouWin();	
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
 					   	}
@@ -188,7 +180,6 @@
 					   		numOfLosses++;
 					   		gameOver = true;
 					   		printYouLose();
-					   		console.log("gameOver:", gameOver);
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
 					    }
@@ -240,8 +231,8 @@
 	{
 		// Changes style of the body according to answerWordObject.cssClass
 		document.body.className = obj.cssClass;
-		// document.querySelectorAll("div.jumbotron") += (" " + obj.cssClass);
-
+		document.getElementById("mainJumbotron").className = ("jumbotron text-center " + obj.cssClass);
+		return;
 	}
 
 	// Takes any string argument and returns an array. This will prevent any conflict some browsers might have when comparing strings to arrays, as this program will do later when comparing the game board to the correct answer.
@@ -258,11 +249,10 @@
 	function genBlankBoard(gmWrd)
 	{
 		var arrayX = [""];
+
 		for (g=0; g<gmWrd.length; g++)
-		{
-			arrayX[g] = " _ ";
-		}
-		console.log("arrayX: " + arrayX);
+		{ arrayX[g] = " _ "; }
+		
 		return arrayX;
 	}
 
