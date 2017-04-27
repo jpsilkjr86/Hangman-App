@@ -40,7 +40,8 @@
 	var numOfWins = 0;
 	var numOfLosses = 0;
 	
-	// Embedded gifs decalred as variables, which will be set as values for instances of the wordObject object type.
+	// Gifs decalred as string variables, which will be set as values for instances of the wordObject object type
+	// in the wordLibrary array.
 	var starTrekGIF = '<img src="assets/gifs/starTrekGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var diddyKongGIF = '<img src="assets/gifs/diddyKongGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var wonderYrsGIF = '<img src="assets/gifs/wonderYrsGIF.gif" width="100%" style="border: 3px solid black;"/>';
@@ -51,9 +52,11 @@
 	var jaimeGIF = '<img src="assets/gifs/jaimeGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var bernieGIF = '<img src="assets/gifs/bernieGIF.gif" width="100%" style="border: 3px solid black;"/>';
 
+
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
-	// Function constructer for "wordObject" object type, which enables stylistic changes  
-	// for each new word serving as a "hint" to the user.
+	// Function constructer for "wordObject" object type, which has three properties: 1) the game word;
+	// 2) the css class name, whose styles can be found on style.css and which serves as a hint for the user; 
+	// and 3) the victory GIF's, which cheer on the user when a word is guessed correctly.
 	function wordObject(wrd, css, gif)
 	{
 		this.word = wrd;
@@ -62,9 +65,9 @@
 	}
 
 	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. 
-	// These are where the words of the Hangman game are defined, as .word properties of each element of 
-	// wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj() 
-	// function for more details about how this object is interpreted.
+	// These are where the words of the Hangman game are defined, as .word properties of each element of the
+	// wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj(), prodWordTheme()
+	// and playWinGif functions for more details about how this object's properties are interpreted.
 	var wordLibrary = [""];
 
 	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme", obamaGIF);
@@ -78,13 +81,14 @@
 	wordLibrary[8] = new wordObject("technology", "technologyTheme", jaimeGIF);
 
 	
-	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in  
-	// HTML body and if user chooses to play again.
+	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in the 
+	// HTML body (see <body> tag in HTML file) and if user chooses to play again.
 
 	function startScreen()
 	{
 		document.onkeyup = function(event)
 		{
+			// If all the elements of wordLibrary have been used up
 			if (wordLibrary.length === 0)
 			{
 				// Clears gifs, prints closing message and disables game.
@@ -113,8 +117,6 @@
 			}					
 		}
 	}
-
-	
 
 
 	// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called when user 
@@ -255,17 +257,21 @@
 		return randWordObj;		
 	}
 
+	// This sets the CSS class for the body and the jumbotron according to the .cssClass for a given wordObject
 	function prodWordTheme(obj)
 	{
-		// Changes style of the body according to answerWordObject.cssClass
+		// Changes style of the body according to the given wordObject element of the wordLibrary array.
+		// The .cssClass property is the name of the CSS class, which includes a variety of unique styles for
+		// each word, including font-family, background image, jumbotron background color, text shadows, etc.
+		// See the CSS style sheet style.css for more details.
 		document.body.className = obj.cssClass;
 		document.getElementById("mainJumbotron").className = ("jumbotron text-center " + obj.cssClass);
 		return;
 	}
 
 	// Takes any string argument and returns an array. This will prevent any conflict some browsers might 
-	// have when comparing strings to arrays, as this program will do later when comparing the game board 
-	// to the correct answer.
+	// have when comparing strings to arrays, as this program will do later when comparing the game board array
+	// to the correct answer array.
 	function wordToArray (wrd)
 	{
 		var ary = [""];
@@ -347,29 +353,29 @@
 		return true;
 	}
 
-	// This function prints set messages related to losing the game. numOfWins and numOfLosses are global variables.
+	// This function prints set messages related to losing the game.
 	function printYouLose()
 	{
 		document.getElementById("gameResultText").innerHTML = "Sorry! You lose.";
 		document.getElementById("gameMsgText").innerHTML = "Press any key to play again.";
-		printWinsLosses();  //updates scoreboard
+		printWinsLosses();  // Prints the updated scoreboard.
 	}
 
-	// This function prints set messages related to winning the game. numOfWins and numOfLosses are global variables.
+	// This function prints set messages related to winning the game.
 	function printYouWin()
 	{
 		document.getElementById("gameResultText").innerHTML = "Good job! You win!";
 	   	document.getElementById("gameMsgText").innerHTML = "Press any key to play again.";
-	   	printWinsLosses();  //updates scoreboard
+	   	printWinsLosses();  // Prints the updated scoreboard.
 	}
 
-	// This simple function prints the scoreboard.
+	// This simple function prints the scoreboard. numOfWins and numOfLosses are global variables.
 	function printWinsLosses()
 	{
 		document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "&nbsp;&nbsp;&nbsp;Losses: " + numOfLosses;
 	}
 
-	// Plays animation for victory GIF's
+	// Plays animation for victory GIF's.
 	function playWinGif(gif)
 	{
 		// Declare two containers which will contain duplicates of the same gif, positions set as absolute below.
@@ -386,14 +392,14 @@
 		cont1.style.opacity = ".70";			cont2.style.opacity = ".70";
 		cont1.style.zIndex = "1000";			cont2.style.zIndex = "1000";
 
-		// Function to move the gif downward. pos1 and pos2 correspond to cont1 and cont2
+		// Function to move gifs diagonally. pos1 and pos2 correspond to cont1 and cont2 respectively.
 		var pos1 = -20;
 		var pos2 = -20;
 		var id = setInterval(frame, 20);
 		function frame() 
 		{
-			if (pos1 >= 12 || pos2 >= 12)  //makes sure they stop at the same time
-			{ clearInterval(id); } 
+			if (pos1 >= 12 || pos2 >= 12)  // Makes sure they stop at the same time
+			{ clearInterval(id); } // Stops the setInterval function from moving the containers
 			else 
 			{
 			  //sets motion of cont1, from top-left moving down-right

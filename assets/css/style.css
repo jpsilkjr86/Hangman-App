@@ -1,6 +1,6 @@
-/* Custom style classes, changed upon each generation of a new wordTheme object in the wordLibrary array. */
+/* Custom style classes, changed upon each generation of a new wordObject element in the wordLibrary array. */
 
-/* Initial body theme */
+/* Initial themes */
 body.initialTheme
 {
 	background-image: url('../images/wildwest.jpg');
