@@ -1,5 +1,3 @@
-
-  
 	// ******PSEUDO-CODE******
 
 	// 1) HTML page displays game screen with CSS styles
@@ -37,34 +35,51 @@
 	// initial value set to true
 	var gameOver = true;
 
-	// numOfWins and numOfLosses set to 0. They're global so that they can be changed on multiple function calls of startScreen() and gameFunction()
+	// numOfWins and numOfLosses set to 0. They're global so that they can be changed on  
+	// multiple function calls of startScreen() and gameFunction()
 	var numOfWins = 0;
 	var numOfLosses = 0;
 	
-	
+	// Embedded gifs decalred as variables, which will be set as values for instances of the wordObject object type.
+	var starTrekGIF = '<img src="assets/gifs/starTrekGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var tinaFeyGIF = '<img src="assets/gifs/tinaFeyGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var wonderYrsGIF = '<img src="assets/gifs/wonderYrsGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var taxiDriverGIF = '<img src="assets/gifs/taxiDriverGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var thumbUpGiF = '<img src="assets/gifs/thumbUpGiF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var damnGoodGIF = '<img src="assets/gifs/damnGoodGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var obamaGIF = '<img src="assets/gifs/obamaGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var jaimeGIF = '<img src="assets/gifs/jaimeGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var bernieGIF = '<img src="assets/gifs/bernieGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
-	// Function constructer for "wordObject" object type, which enables stylistic changes for each new word serving as a "hint" to the user
-	function wordObject(wrd, css)
+	// Function constructer for "wordObject" object type, which enables stylistic changes  
+	// for each new word serving as a "hint" to the user.
+	function wordObject(wrd, css, gif)
 	{
 		this.word = wrd;
 		this.cssClass = css;
+		this.winGif = gif;
 	}
 
-	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. These are where the words of the Hangman game are defined, as .word properties of each element of wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj() function for more details about how this object is interpreted.
+	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. 
+	// These are where the words of the Hangman game are defined, as .word properties of each element of 
+	// wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj() 
+	// function for more details about how this object is interpreted.
 	var wordLibrary = [""];
 
-	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme");
-	wordLibrary[1] = new wordObject("hippie", "hippieTheme");
-	wordLibrary[2] = new wordObject("continent", "continentTheme");
-	wordLibrary[3] = new wordObject("biology", "biologyTheme");
-	wordLibrary[4] = new wordObject("javascript", "javascriptTheme");
-	wordLibrary[5] = new wordObject("cuisine", "cuisineTheme");
-	wordLibrary[6] = new wordObject("pomegranate", "pomegranateTheme");
-	wordLibrary[7] = new wordObject("tropical", "tropicalTheme");
-	wordLibrary[8] = new wordObject("technology", "technologyTheme");
+	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme", obamaGIF);
+	wordLibrary[1] = new wordObject("hippie", "hippieTheme", bernieGIF);
+	wordLibrary[2] = new wordObject("continent", "continentTheme", tinaFeyGIF);
+	wordLibrary[3] = new wordObject("biology", "biologyTheme", taxiDriverGIF);
+	wordLibrary[4] = new wordObject("javascript", "javascriptTheme", starTrekGIF);
+	wordLibrary[5] = new wordObject("cuisine", "cuisineTheme", wonderYrsGIF);
+	wordLibrary[6] = new wordObject("pomegranate", "pomegranateTheme", damnGoodGIF);
+	wordLibrary[7] = new wordObject("tropical", "tropicalTheme", thumbUpGiF);
+	wordLibrary[8] = new wordObject("technology", "technologyTheme", jaimeGIF);
 
 	
-	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in HTML body and if user chooses to play again.
+	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in  
+	// HTML body and if user chooses to play again.
 
 	function startScreen()
 	{
@@ -73,10 +88,7 @@
 			if (wordLibrary.length === 0)
 			{
 				// Prints message and disables game.
-				clearMessage("gameMsgText");
-				clearMessage("attemptsRemainingText"); 
-				clearMessage("lettersGuessedText");
-				printMessage("gameResultText", "Congratulations! You have used up all the words in this game.");
+				printMessage("gameMsgText", "Congratulations! You have used up all the words in this game.");
 				document.onkeyup = null;
 				return;
 			}
@@ -88,6 +100,7 @@
 				   	clearMessage("gameResultText"); 
 				   	clearMessage("attemptsRemainingText"); 
 				   	clearMessage("lettersGuessedText");
+				   	clearMessage("gifDiv");
 
 				   	// Prints message, calls gameFunction(), ends script.
 				   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
@@ -101,7 +114,13 @@
 	
 
 
-	// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called when user presses a key (see above). Essentially this whole program passes the ball back and forth between startScreen() and gameFunction(), which house the only two document.onkeyup events. This allows the program to reinitialize the onkeyup events after they automatically disable themselves. I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it again to restart the game. After I housed both events in the two functions and had each function call each other before ending their scripts, the game was able to work properly.
+	// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called when user 
+	// presses a key (see above). Essentially this whole program passes the ball back and forth 
+	// between startScreen() and gameFunction(), which house the only two document.onkeyup events. This 
+	// allows the program to reinitialize the onkeyup events after they automatically disable themselves. 
+	// I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it 
+	// again to restart the game. After I housed both events in the two functions and had each function 
+	// call each other before ending their scripts, the game was able to work properly.
 
 	function gameFunction ()
 	{
@@ -127,8 +146,10 @@
 		// Generate blank game board, same length as answerWordObj.word but letters replaced by spaces.
 		gameBoardArray = genBlankBoard(answerWordObj.word);
 
-		// Print game board, which at this point will be all blank
+		// Print initial game board (all blank), attempts remaining, and wins/losses
 		printGameBoard(gameBoardArray);
+		printMessage("attemptsRemainingText", "Attempts Remaining: ", attemptsRemaining);
+		printWinsLosses();
 
 		// Main game procresses, triggered by input between keycodes 65 (a/A) and 90 (z/Z)
 		document.onkeyup = function(event)
@@ -146,7 +167,9 @@
 				else // I.e. if letter was not already guessed
 				{
 					// Add letterGuessed to the list of guessed letters in lettersGuessedArray.
-					// Did not use ".push()" because of an issue where it would push the first added letter to index 1 rather than index 0, since the array was declared as an empty string. Not sure how to fix that.				
+					// Did not use ".push()" because of an issue where it would push the first added letter to 
+					// index 1 rather than index 0, since the array was declared as an empty string. Not sure how 
+					// to fix that.				
 					lettersGuessedArray[numOfGuessedLetters] = letterGuessed;
 					numOfGuessedLetters++;
 					printMessage("lettersGuessedText", "List of Guessed Letters: ", lettersGuessedArray);
@@ -162,9 +185,9 @@
 						if (areAllLettersOk(answerWordObj.word, gameBoardArray))
 					   	{
 					   		numOfWins++;
-					   		gameOver = true;
-							clearMessage("attemptsRemainingText");						   		
-					   		printYouWin();	
+					   		gameOver = true;						   		
+					   		printYouWin();
+					   		printMessage("gifDiv", answerWordObj.winGif);	// prints victory gif unique to the word only if user wins
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
 					   	}
@@ -208,10 +231,12 @@
 	{ document.getElementById(elementId).innerHTML = ""; }
 
 	
-	// Generates and returns random word from wordLibrary, a global array of objects set above. This function also changes the background according to the object properties of the randomly generated word.
+	// Generates and returns random word from wordLibrary, a global array of objects set above. This function 
+	// also changes the background according to the object properties of the randomly generated word.
 	function genAnsWordObj()
 	{
-		// random word object from wordLibrary is generated. The actual word is stored in the .word property of wordLibrary[x] object.
+		// random word object from wordLibrary is generated. The actual word is stored in the .word property of 
+		// wordLibrary[x] object.
 		var x = Math.floor(Math.random() * wordLibrary.length);
 		var randWordObj = wordLibrary[x];
 
@@ -219,7 +244,8 @@
 		for (i=x; i<wordLibrary.length; i++)
 		{ wordLibrary[i] = wordLibrary[i+1]; }
 
-		// Pop off the last element of the array, which became "undefined" after the for loop. This will decrease the length of the wordLibrary array by 1.
+		// Pop off the last element of the array, which became "undefined" after the for loop. This will 
+		// decrease the length of the wordLibrary array by 1.
 		wordLibrary.pop();
 
 		// Return random word object.
@@ -234,7 +260,9 @@
 		return;
 	}
 
-	// Takes any string argument and returns an array. This will prevent any conflict some browsers might have when comparing strings to arrays, as this program will do later when comparing the game board to the correct answer.
+	// Takes any string argument and returns an array. This will prevent any conflict some browsers might 
+	// have when comparing strings to arrays, as this program will do later when comparing the game board 
+	// to the correct answer.
 	function wordToArray (wrd)
 	{
 		var ary = [""];
@@ -275,7 +303,8 @@
 		return false;
 	}
 
-	// This function performs the same exact task as wasLetterAlreadyGuessed() above, but is named differently for the sake of descriptiveness.
+	// This function performs the same exact task as wasLetterAlreadyGuessed() above, but is named differently 
+	// for the sake of descriptiveness.
 	function isLetterCorrect(ltr, gmWrd)
 	{
 		for (j=0; j<gmWrd.length; j++)
@@ -287,7 +316,10 @@
 		return false;
 	}
 
-	// This function updates the game board by checking which position the guessed letter (ltr) matches the correct answer word (gmWrd), and then replacing the blank space in the same position on the game board (gmBrd) with the same letter (ltr). The for loop doesn't break, which allows multiple elements to be replaced by the same letter.
+	// This function updates the game board by checking which position the guessed letter (ltr) matches  
+	// the correct answer word (gmWrd), and then replacing the blank space in the same position on the 
+	// game board (gmBrd) with the same letter (ltr). The for loop doesn't break, which allows multiple 
+	// elements to be replaced by the same letter.
 	function updateGameBoard(ltr, gmWrd, gmBrd)
 	{
 		for (k=0; k<gmWrd.length; k++)
@@ -299,7 +331,8 @@
 		return gmBrd;
 	}
 
-	// This runs a quick loop checking to see if gmBrd and gmWrd arrays exactly match or not. If there's one inconcistency it returns false. If it can exit the loop then it must be true, so returns true.
+	// This runs a quick loop checking to see if gmBrd and gmWrd arrays exactly match or not. If there's 
+	// one inconcistency it returns false. If it can exit the loop then it must be true, so returns true.
 	function areAllLettersOk(gmWrd, gmBrd)
 	{
 		for (m=0; m<gmWrd.length; m++)
@@ -316,7 +349,7 @@
 	{
 		document.getElementById("gameResultText").innerHTML = "Sorry! You lose.";
 		document.getElementById("gameMsgText").innerHTML = "Press any key to play again.";
-		document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "<br>Losses: " + numOfLosses;
+		printWinsLosses();  //updates scoreboard
 	}
 
 	// This function prints set messages related to winning the game. numOfWins and numOfLosses are global variables.
@@ -324,5 +357,11 @@
 	{
 		document.getElementById("gameResultText").innerHTML = "Good job! You win!";
 	   	document.getElementById("gameMsgText").innerHTML = "Press any key to play again.";
-	   	document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "<br>Losses: " + numOfLosses;
+	   	printWinsLosses();  //updates scoreboard
+	}
+
+	// This simple function prints the scoreboard.
+	function printWinsLosses()
+	{
+		document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "&nbsp;&nbsp;&nbsp;Losses: " + numOfLosses;
 	}
