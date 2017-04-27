@@ -26,39 +26,39 @@
   <!-- Call startScreen() function upon page loading to start the script. -->
   <body onload="startScreen()" class="initialTheme">
     <div class="container">
-
+      <!-- Set gif div placeholders outside of jumbotron -->
+      <div id="gifDiv1" class="text-center"></div>
+      <div id="gifDiv2" class="text-center"></div>
       <!-- Put text in jumbotron for visibility -->
     	<div class="jumbotron text-center" id="mainJumbotron">
+        <!-- Row 1: Header -->
         <div class = "row">
           <div class = "col-xs-12">
             <h1>Hangman</h1>
           </div>
         </div>
-
+        <!-- Row 2: Game Board and muted class Game Message -->
         <div class="row">
           <div class="col-xs-12">
             <p><span id="gameMsgText" class="text-muted">Press any key to get started!</span></p>
             <p><strong><span id="gameBoardText" class="text-success"></span></strong></p>
           </div>
         </div>
-
+        <!-- Row 3: Two columns -->
         <div class="row">
+          <!-- Left column: Letters Guessed and Attempts Remaining -->
           <div class="col-xs-6">            
             <p><span id="lettersGuessedText" class="text-warning"></span></p>
             <p><span id="attemptsRemainingText" class="text-danger"></span></p>
           </div>
+          <!-- Right column: Game Result (i.e. right or wrong, win or lose) and Score Board -->
           <div class="col-xs-6">
             <p><strong><span id="gameResultText" class="text-primary"></span></strong></p>
             <p><span id="scoreBoardText" class="text-info"></span></p> 
           </div>
-        </div>
-	        <!-- Empty elements, replaced by various JavaScript functions as needed -->
-        
-    	</div> <!--end jumbotron-->
-
-      <div id="gifDiv" class="text-center"></div>
-
-    </div>
+        </div> <!-- End Row 3 -->        
+    	</div> <!--End Jumbotron -->
+    </div> <!--End Container-->
 
     <!-- Exertnal JavaScript Sheet -->
 	<script src="assets/js/script.js"></script>

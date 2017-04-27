@@ -41,15 +41,15 @@
 	var numOfLosses = 0;
 	
 	// Embedded gifs decalred as variables, which will be set as values for instances of the wordObject object type.
-	var starTrekGIF = '<img src="assets/gifs/starTrekGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var tinaFeyGIF = '<img src="assets/gifs/tinaFeyGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var wonderYrsGIF = '<img src="assets/gifs/wonderYrsGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var taxiDriverGIF = '<img src="assets/gifs/taxiDriverGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var thumbUpGiF = '<img src="assets/gifs/thumbUpGiF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var damnGoodGIF = '<img src="assets/gifs/damnGoodGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var obamaGIF = '<img src="assets/gifs/obamaGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var jaimeGIF = '<img src="assets/gifs/jaimeGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
-	var bernieGIF = '<img src="assets/gifs/bernieGIF.gif" width="240" style="margin-bottom: 100px; border: 3px solid black;"/>';
+	var starTrekGIF = '<img src="assets/gifs/starTrekGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var diddyKongGIF = '<img src="assets/gifs/diddyKongGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var wonderYrsGIF = '<img src="assets/gifs/wonderYrsGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var horseHeadGIF = '<img src="assets/gifs/horseHeadGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var thumbUpGiF = '<img src="assets/gifs/thumbUpGiF.gif" width="100%" style="border: 3px solid black;"/>';
+	var damnGoodGIF = '<img src="assets/gifs/damnGoodGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var obamaGIF = '<img src="assets/gifs/obamaGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var jaimeGIF = '<img src="assets/gifs/jaimeGIF.gif" width="100%" style="border: 3px solid black;"/>';
+	var bernieGIF = '<img src="assets/gifs/bernieGIF.gif" width="100%" style="border: 3px solid black;"/>';
 
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
 	// Function constructer for "wordObject" object type, which enables stylistic changes  
@@ -69,8 +69,8 @@
 
 	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme", obamaGIF);
 	wordLibrary[1] = new wordObject("hippie", "hippieTheme", bernieGIF);
-	wordLibrary[2] = new wordObject("continent", "continentTheme", tinaFeyGIF);
-	wordLibrary[3] = new wordObject("biology", "biologyTheme", taxiDriverGIF);
+	wordLibrary[2] = new wordObject("continent", "continentTheme", diddyKongGIF);
+	wordLibrary[3] = new wordObject("biology", "biologyTheme", horseHeadGIF);
 	wordLibrary[4] = new wordObject("javascript", "javascriptTheme", starTrekGIF);
 	wordLibrary[5] = new wordObject("cuisine", "cuisineTheme", wonderYrsGIF);
 	wordLibrary[6] = new wordObject("pomegranate", "pomegranateTheme", damnGoodGIF);
@@ -87,7 +87,9 @@
 		{
 			if (wordLibrary.length === 0)
 			{
-				// Prints message and disables game.
+				// Clears gifs, prints closing message and disables game.
+				clearMessage("gifDiv1");
+				clearMessage("gifDiv2");
 				printMessage("gameMsgText", "Congratulations! You have used up all the words in this game.");
 				document.onkeyup = null;
 				return;
@@ -96,11 +98,12 @@
 			{
 				if (gameOver)
 				{
-				   	// Clears the board when this function is called for restarting the game.
+				   	// Cleans up the board when this function is called for restarting the game.
 				   	clearMessage("gameResultText"); 
 				   	clearMessage("attemptsRemainingText"); 
 				   	clearMessage("lettersGuessedText");
-				   	clearMessage("gifDiv");
+				   	clearMessage("gifDiv1");
+				   	clearMessage("gifDiv2");
 
 				   	// Prints message, calls gameFunction(), ends script.
 				   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
@@ -187,7 +190,7 @@
 					   		numOfWins++;
 					   		gameOver = true;						   		
 					   		printYouWin();
-					   		printMessage("gifDiv", answerWordObj.winGif);	// prints victory gif unique to the word only if user wins
+					   		playWinGif(answerWordObj.winGif);
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
 					   	}
@@ -364,4 +367,44 @@
 	function printWinsLosses()
 	{
 		document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "&nbsp;&nbsp;&nbsp;Losses: " + numOfLosses;
+	}
+
+	// Plays animation for victory GIF's
+	function playWinGif(gif)
+	{
+		// Declare two containers which will contain duplicates of the same gif, positions set as absolute below.
+		var cont1 = document.getElementById("gifDiv1");
+		var cont2 = document.getElementById("gifDiv2");
+		cont1.innerHTML = gif;
+		cont2.innerHTML = gif;
+
+		// cont1 comes from top left			// cont2 comes from top right
+		cont1.style.position = "absolute"; 		cont2.style.position = "absolute";
+		cont1.style.width = "18%";				cont2.style.width = "18%";
+		cont1.style.left = "-20%";				cont2.style.right = "-20%";
+		cont1.style.top = "-20%";				cont2.style.top = "-20%";
+		cont1.style.opacity = ".70";			cont2.style.opacity = ".70";
+		cont1.style.zIndex = "1000";			cont2.style.zIndex = "1000";
+
+		// Function to move the gif downward. pos1 and pos2 correspond to cont1 and cont2
+		var pos1 = -20;
+		var pos2 = -20;
+		var id = setInterval(frame, 20);
+		function frame() 
+		{
+			if (pos1 >= 12 || pos2 >= 12)  //makes sure they stop at the same time
+			{ clearInterval(id); } 
+			else 
+			{
+			  //sets motion of cont1, from top-left moving down-right
+			  pos1 += .33;  
+			  cont1.style.left = pos1 + '%';
+			  cont1.style.top = pos1 + '%';
+
+			  //sets motion of cont2, from top-right moving down-left
+			  pos2 += .33;
+			  cont2.style.right = pos2 + '%';
+			  cont2.style.top = pos2 + '%'; 
+			}
+		}
 	}
