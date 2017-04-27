@@ -43,7 +43,7 @@
 	var jaimeGIF = '<img src="assets/gifs/jaimeGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var bernieGIF = '<img src="assets/gifs/bernieGIF.gif" width="100%" style="border: 3px solid black;"/>';
 
-
+	
 	// ******DECLARE GLOBAL OBJECTS AND OBJECT CONSTRUCTOR FUNCTION******
 	// Function constructer for "wordObject" object type, which has three properties: 1) the game word;
 	// 2) the css class name, whose styles can be found on style.css and which serves as a hint for the user; 
@@ -94,6 +94,7 @@
 				// Clears gifs, prints closing message and disables game.
 				clearMessage("gifDiv1");
 				clearMessage("gifDiv2");
+				cheersAudio("stop"); // argument "stop" tells the function to stop any sound that's playing.
 				printMessage("gameMsgText", "Congratulations! You have used up all the words in this game.");
 				document.onkeyup = null;
 				return;
@@ -108,6 +109,7 @@
 				   	clearMessage("lettersGuessedText");
 				   	clearMessage("gifDiv1");
 				   	clearMessage("gifDiv2");
+				   	cheersAudio("stop"); // argument "stop" tells the function to stop any sound that's playing.
 
 				   	// Prints message, calls gameFunction(), ends script.
 				   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
@@ -202,6 +204,7 @@
 					   		gameStatus.gameOver = true;						   		
 					   		printYouWin();
 					   		playWinGif(answerWordObj.winGif);
+					   		cheersAudio("play"); // argument "play" tells the function to play.
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
 					   	}
@@ -423,4 +426,20 @@
 			  cont2.style.top = pos2 + '%'; 
 			}
 		}
+	}
+
+	// This function takes a string argument "play" or "stop" and plays or stops the cheers audio accordingly.
+	function cheersAudio(str)
+	{
+		var aud = document.getElementById("cheers");
+		
+		if (str === "play")
+		{aud.play();}
+
+		// This not only pauses the sound bite but also resets the time so it won't resume on a later function call.
+		if (str === "stop") 
+		{
+			aud.pause();
+			aud.currentTime = 0;
+		}		
 	}
