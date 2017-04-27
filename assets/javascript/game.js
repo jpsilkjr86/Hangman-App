@@ -31,17 +31,8 @@
 
 	// ******DECLARE GLOBAL VARIABLES*******
 	
-	// gameOver is passed back and forth between the two main functions startScreen() and gameFunction()
-	// initial value set to true
-	var gameOver = true;
-
-	// numOfWins and numOfLosses set to 0. They're global so that they can be changed on  
-	// multiple function calls of startScreen() and gameFunction()
-	var numOfWins = 0;
-	var numOfLosses = 0;
-	
 	// Gifs decalred as string variables, which will be set as values for instances of the wordObject object type
-	// in the wordLibrary array.
+	// in the wordLibrary array (see below).
 	var starTrekGIF = '<img src="assets/gifs/starTrekGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var diddyKongGIF = '<img src="assets/gifs/diddyKongGIF.gif" width="100%" style="border: 3px solid black;"/>';
 	var wonderYrsGIF = '<img src="assets/gifs/wonderYrsGIF.gif" width="100%" style="border: 3px solid black;"/>';
@@ -80,6 +71,15 @@
 	wordLibrary[7] = new wordObject("tropical", "tropicalTheme", thumbUpGiF);
 	wordLibrary[8] = new wordObject("technology", "technologyTheme", jaimeGIF);
 
+	// gameStatus global object houses the number of wins and losses as well as the gameOver bool. Setting them  
+	// as global variables allows them to be added to or changed by the two main functions startScreen() and  
+	// gameFunction(), no matter how many times the user decides to play the game.
+	var gameStatus = 
+	{
+		wins: 0,
+		losses: 0,
+		gameOver: true
+	};
 	
 	// ******INITIALIZE OR RESTART GAME****** -- startScreen() function is called "onload" in the 
 	// HTML body (see <body> tag in HTML file) and if user chooses to play again.
@@ -100,7 +100,7 @@
 			}
 			else
 			{
-				if (gameOver)
+				if (gameStatus.gameOver)
 				{
 				   	// Cleans up the board when this function is called for restarting the game.
 				   	clearMessage("gameResultText"); 
@@ -129,31 +129,40 @@
 
 	function gameFunction ()
 	{
-		// set global variable gameOver to false at the beginning of each game.
-	   	gameOver = false;
+		// set global boolean gameStatus.gameOver equal to false at the beginning of each game.
+	   	gameStatus.gameOver = false;
 
-		// Declare local variables scoped to gameFunction, set their initial values.
-		var attemptsRemaining = 10;
-		var letterGuessed = "";	 // user input variable for guessed letters			
-		var gameBoardArray = [""];  // Running list of correct letters, i.e. the user's Hangman Game Board
-		var numOfGuessedLetters = 0;   // to be used as the index for lettersGuessedArray[] when adding new letters
-		var lettersGuessedArray = [""];  // running list of all guessed letters, right and wrong.
+		// Declare local object variables scoped to gameFunction, set their initial values.
+		var guess = 
+		{
+			letter: "",   // user input variable for guessed letters
+			lettersArray: [""],  // running list of all guessed letters, right and wrong.
+			numOf: 0 // number of guesses, to be used as the index for lettersArray[] when adding new letters
+		};
 
-		// Generate one random answer word object, which contains the answer word and corresponding styles and themes.
-		var answerWordObj = genAnsWordObj();
+		var gameBoard = 
+		{
+			array: [""],  // running list of correct letters, i.e. the user's Hangman Game Board.
+			attemptsRemaining: 10  // i.e. the initial number of "lives" the user has.
+		};
+		
+		// Generate one random answer word object, which contains the answer word and corresponding styles, 
+		// themes, and gifs. This local object variable is equal to a random element from the wordLibrary  
+		// array. See global wordObj and wordLibrary[] declarations above for more details.
+		var answerWordObj = genAnsWordObj(); // properties: .word, .cssStyle, .winGif
+		
+		// Generate blank game board array, same length as answerWordObj.word but letters replaced by spaces.
+		gameBoard.array = genBlankBoard(answerWordObj.word);  		
 
-		// Converts the answer word into an array so that it can be compared later with the gameBoardArray.
+		// Converts the answer word into an array so that it can be compared later with the gameBoard.array.
 		answerWordObj.word = wordToArray(answerWordObj.word);
 
 		// Produces the web page styles that are associated with the answer word, serving as a hint for the user.
 		prodWordTheme(answerWordObj);
 
-		// Generate blank game board, same length as answerWordObj.word but letters replaced by spaces.
-		gameBoardArray = genBlankBoard(answerWordObj.word);
-
 		// Print initial game board (all blank), attempts remaining, and wins/losses
-		printGameBoard(gameBoardArray);
-		printMessage("attemptsRemainingText", "Attempts Remaining: ", attemptsRemaining);
+		printGameBoard(gameBoard.array);
+		printMessage("attemptsRemainingText", "Attempts Remaining: ", gameBoard.attemptsRemaining);
 		printWinsLosses();
 
 		// Main game procresses, triggered by input between keycodes 65 (a/A) and 90 (z/Z)
@@ -162,35 +171,35 @@
 			if (event.keyCode >= 65 && event.keyCode <= 90)
 		   	{
 		   		// Always converts the guessed letter to lowercase, stores it and displays it for the user
-		   		letterGuessed = event.key.toLowerCase();
-		   		printMessage("gameMsgText", "You guessed: ", letterGuessed);
+		   		guess.letter = event.key.toLowerCase();
+		   		printMessage("gameMsgText", "You guessed: ", guess.letter);
 
 		   		// Condition is a function which checks to see if letter was already guessed (returns bool)
-				if (wasLetterAlreadyGuessed(letterGuessed, lettersGuessedArray))
+				if (wasLetterAlreadyGuessed(guess.letter, guess.lettersArray))
 				{ printMessage("gameResultText", "Letter was already guessed."); }
 
 				else // I.e. if letter was not already guessed
 				{
-					// Add letterGuessed to the list of guessed letters in lettersGuessedArray.
+					// Add guess.letter to the list of guessed letters in guess.lettersArray.
 					// Did not use ".push()" because of an issue where it would push the first added letter to 
 					// index 1 rather than index 0, since the array was declared as an empty string. Not sure how 
 					// to fix that.				
-					lettersGuessedArray[numOfGuessedLetters] = letterGuessed;
-					numOfGuessedLetters++;
-					printMessage("lettersGuessedText", "List of Guessed Letters: ", lettersGuessedArray);
+					guess.lettersArray[guess.numOf] = guess.letter;
+					guess.numOf++;
+					printMessage("lettersGuessedText", "List of Guessed Letters: ", guess.lettersArray);
 					
 					// Condition is a function which checks to see if letter was correct (returns bool)
-					if (isLetterCorrect(letterGuessed, answerWordObj.word))
+					if (isLetterCorrect(guess.letter, answerWordObj.word))
 					{
 						// Update and print the game board
-						gameBoardArray = updateGameBoard(letterGuessed, answerWordObj.word, gameBoardArray);
-						printGameBoard(gameBoardArray);
+						gameBoard.array = updateGameBoard(guess.letter, answerWordObj.word, gameBoard.array);
+						printGameBoard(gameBoard.array);
 
 						// Condition is a function which checks to see if all board letters are complete (returns bool)
-						if (areAllLettersOk(answerWordObj.word, gameBoardArray))
+						if (areAllLettersOk(answerWordObj.word, gameBoard.array))
 					   	{
-					   		numOfWins++;
-					   		gameOver = true;						   		
+					   		gameStatus.wins++;
+					   		gameStatus.gameOver = true;						   		
 					   		printYouWin();
 					   		playWinGif(answerWordObj.winGif);
 					   		startScreen(); // passes ball back to startScreen() function
@@ -200,12 +209,12 @@
 					}
 					else  // I.e. if letter is not correct
 					{							
-						attemptsRemaining--;
-						printMessage("attemptsRemainingText", "Attempts Remaining: ", attemptsRemaining);
-						if (attemptsRemaining === 0)
+						gameBoard.attemptsRemaining--;
+						printMessage("attemptsRemainingText", "Attempts Remaining: ", gameBoard.attemptsRemaining);
+						if (gameBoard.attemptsRemaining === 0)
 					    {
-					   		numOfLosses++;
-					   		gameOver = true;
+					   		gameStatus.losses++;
+					   		gameStatus.gameOver = true;
 					   		printYouLose();
 					   		startScreen(); // passes ball back to startScreen() function
 					   		return;
@@ -369,10 +378,11 @@
 	   	printWinsLosses();  // Prints the updated scoreboard.
 	}
 
-	// This simple function prints the scoreboard. numOfWins and numOfLosses are global variables.
+	// This simple function prints the scoreboard. gameStatus.wins and gameStatus.losses are global variables.
 	function printWinsLosses()
 	{
-		document.getElementById("scoreBoardText").innerHTML = "Wins: " + numOfWins + "&nbsp;&nbsp;&nbsp;Losses: " + numOfLosses;
+		document.getElementById("scoreBoardText").innerHTML = "Wins: " + gameStatus.wins + 
+		"&nbsp;&nbsp;&nbsp;Losses: " + gameStatus.losses;
 	}
 
 	// Plays animation for victory GIF's.
