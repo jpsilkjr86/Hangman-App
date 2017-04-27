@@ -81,7 +81,7 @@
 	wordLibrary[8] = new wordObject("technology", "technologyTheme", jaimeGIF);
 
 	
-	// ******INITIALIZE GAME****** -- startScreen() function is called "onload" in the 
+	// ******INITIALIZE OR RESTART GAME****** -- startScreen() function is called "onload" in the 
 	// HTML body (see <body> tag in HTML file) and if user chooses to play again.
 
 	function startScreen()
@@ -129,7 +129,7 @@
 
 	function gameFunction ()
 	{
-		// set gameOver to false at the beginning of each game.
+		// set global variable gameOver to false at the beginning of each game.
 	   	gameOver = false;
 
 		// Declare local variables scoped to gameFunction, set their initial values.
