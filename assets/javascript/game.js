@@ -57,8 +57,8 @@
 
 	// wordLibrary is a global array of objects, each of which are instances of the wordObject object type. 
 	// These are where the words of the Hangman game are defined, as .word properties of each element of the
-	// wordLibrary array, in addition to the styles for each word to be guessed. See genAnsWordObj(), prodWordTheme()
-	// and playWinGif functions for more details about how this object's properties are interpreted.
+	// wordLibrary array, in addition to the styles and GIF's associated with each word. See genAnsWordObj(), 
+	// prodWordTheme() & playWinGif() functions for more details about how these objects' properties are interpreted.
 	var wordLibrary = [""];
 
 	wordLibrary[0] = new wordObject("calligraphy", "calligraphyTheme", obamaGIF);
@@ -91,7 +91,7 @@
 			// If all the elements of wordLibrary have been used up
 			if (wordLibrary.length === 0)
 			{
-				// Clears gifs, prints closing message and disables game.
+				// Clears gifs, , stops sounds, prints closing message and disables game.
 				clearMessage("gifDiv1");
 				clearMessage("gifDiv2");
 				cheersAudio("stop"); // argument "stop" tells the function to stop any sound that's playing.
@@ -99,30 +99,27 @@
 				document.onkeyup = null;
 				return;
 			}
-			else
+			else if (gameStatus.gameOver)
 			{
-				if (gameStatus.gameOver)
-				{
-				   	// Cleans up the board when this function is called for restarting the game.
-				   	clearMessage("gameResultText"); 
-				   	clearMessage("attemptsRemainingText"); 
-				   	clearMessage("lettersGuessedText");
-				   	clearMessage("gifDiv1");
-				   	clearMessage("gifDiv2");
-				   	cheersAudio("stop"); // argument "stop" tells the function to stop any sound that's playing.
+			   	// Cleans up the board when this function is called for restarting the game.
+			   	clearMessage("gameResultText"); 
+			   	clearMessage("attemptsRemainingText"); 
+			   	clearMessage("lettersGuessedText");
+			   	clearMessage("gifDiv1");
+			   	clearMessage("gifDiv2");
+			   	cheersAudio("stop"); // argument "stop" tells the function to stop any sound that's playing.
 
-				   	// Prints message, calls gameFunction(), ends script.
-				   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
-				   	gameFunction();
-				   	return;
-				}
-			}					
+			   	// Prints message, calls gameFunction(), ends script.
+			   	printMessage("gameMsgText", "Now press any letter key to guess a letter!");
+			   	gameFunction();
+			   	return;
+			}								
 		}
 	}
 
 
-	// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called when user 
-	// presses a key (see above). Essentially this whole program passes the ball back and forth 
+	// ******MAIN GAME FUNCTION******* -- to carry out and order all game tasks, called in startScreen()  
+	// when user presses a key (see above). Essentially this whole program passes the ball back and forth 
 	// between startScreen() and gameFunction(), which house the only two document.onkeyup events. This 
 	// allows the program to reinitialize the onkeyup events after they automatically disable themselves. 
 	// I ran into an error earlier, where the first onkeyup became disabled and I was unable to call it 
@@ -137,21 +134,21 @@
 		// Declare local object variables scoped to gameFunction, set their initial values.
 		var guess = 
 		{
-			letter: "",   // user input variable for guessed letters
+			letter: "",   // user input variable for guessed letters.
 			lettersArray: [""],  // running list of all guessed letters, right and wrong.
-			numOf: 0 // number of guesses, to be used as the index for lettersArray[] when adding new letters
+			numOf: 0 // number of guesses, to be used as the index for lettersArray[] when adding new letters.
 		};
 
 		var gameBoard = 
 		{
-			array: [""],  // running list of correct letters, i.e. the user's Hangman Game Board.
+			array: [""],  // running list of correctly guessed letters, i.e. the user's Hangman Game Board.
 			attemptsRemaining: 10  // i.e. the initial number of "lives" the user has.
 		};
 		
 		// Generate one random answer word object, which contains the answer word and corresponding styles, 
 		// themes, and gifs. This local object variable is equal to a random element from the wordLibrary  
-		// array. See global wordObj and wordLibrary[] declarations above for more details.
-		var answerWordObj = genAnsWordObj(); // properties: .word, .cssStyle, .winGif
+		// array. See global wordObj and wordLibrary[] declarations above as well as genAnsWordObj for more details.
+		var answerWordObj = genAnsWordObj(); // returns properties: .word, .cssStyle, .winGif
 		
 		// Generate blank game board array, same length as answerWordObj.word but letters replaced by spaces.
 		gameBoard.array = genBlankBoard(answerWordObj.word);  		
@@ -272,10 +269,10 @@
 	// This sets the CSS class for the body and the jumbotron according to the .cssClass for a given wordObject
 	function prodWordTheme(obj)
 	{
-		// Changes style of the body according to the given wordObject element of the wordLibrary array.
-		// The .cssClass property is the name of the CSS class, which includes a variety of unique styles for
-		// each word, including font-family, background image, jumbotron background color, text shadows, etc.
-		// See the CSS style sheet style.css for more details.
+		// Changes style of the body and jumbotron according to the given wordObject element of the wordLibrary 
+		// array. The value of the .cssClass property is the name of the CSS class, which includes a variety of 
+		// unique styles for each word, including font-family, background image, jumbotron background color, 
+		// text shadows, etc. See the CSS style sheet style.css for more details.
 		document.body.className = obj.cssClass;
 		document.getElementById("mainJumbotron").className = ("jumbotron text-center " + obj.cssClass);
 		return;
@@ -299,8 +296,7 @@
 		var arrayX = [""];
 
 		for (g=0; g<gmWrd.length; g++)
-		{ arrayX[g] = " _ "; }
-		
+		{ arrayX[g] = " _ "; }		
 		return arrayX;
 	}
 
