@@ -12,7 +12,7 @@
 
 	//    iii) User presses key to guess a letter
 
-	//       a) if the letter has already been guessed, try again
+	//       a) if the letter has already been guessed, tell user to try again
 
 	//       b) If not, proceed to (iv)
 
@@ -200,7 +200,7 @@
 			  cont2.style.top = pos2 + '%'; 
 			}
 		}
-	}
+	} // end playWinGif(gif)
 
 	// Takes any string argument and returns an array. This will prevent any conflict some browsers might 
 	// have when comparing strings to arrays, as this program will do later when comparing the game board array
@@ -399,7 +399,7 @@
 		gameStatus.printMessage("attemptsRemainingText", "Attempts Remaining: ", hangMan.attemptsRemaining);
 		gameStatus.printWinsLosses();
 
-		// Main game procresses, triggered by input between keycodes 65 (a/A) and 90 (z/Z)
+		// Main game procresses, triggered only by input between keycodes 65 (a/A) and 90 (z/Z)
 		document.onkeyup = function(event)
 		{
 			if (event.keyCode >= 65 && event.keyCode <= 90)
